@@ -1,0 +1,40 @@
+
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      naming:
+        physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    defer-datasource-initialization: true
+  datasource:
+    #    url: jdbc:mariadb://127.0.0.1:3306/stock_db
+    #    username: root
+    #    password: test1234
+    #    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://toolz-mariadb.ccuissfgxozr.ap-northeast-2.rds.amazonaws.com:3306/stock_db
+    username: zorba
+    password: zorba4you
+    driver-class-name: org.mariadb.jdbc.Driver
+  h2:
+    console:
+      enabled: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 84514661269-podk73kqjgco1j4lchrib14qckkjoe75.apps.googleusercontent.com
+            client-secret: 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
+            scope: email, profile
+jwt:
+  issuer: toolz@gmail.com
+  secret_key: study-springboot
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.security: trace
