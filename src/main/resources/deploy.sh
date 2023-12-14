@@ -1,9 +1,9 @@
 #!/bin/bash
 
 REPOSITORY=/home/ec2-user/app/step1
-PROJECT_NAME=kz
+PROJECT_NAME=kz-back
 
-cp $REPOSITORY/$PROJECT_NAME/
+cd $REPOSITORY/$PROJECT_NAME/
 
 echo "> git pull"
 git pull
@@ -40,5 +40,5 @@ echo "> $JAR_NAME 에 실행권한 추가"
 
 chmod +x $JAR_NAME
 
-nohup java -jar $REPOSITORY/$JAR_NAME 2>&1 &
+nohup java -jar $JAR_NAME 2>&1 &
 echo "> $JAR_NAME 실행"
