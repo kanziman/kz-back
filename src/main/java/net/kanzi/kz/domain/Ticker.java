@@ -28,9 +28,10 @@ public class Ticker {
     private String por;
     private String psr;
     private String dy;
-    private float close;
-    private long volume;
+    private float value;
     private long shares;
+    private long volume;
+    private float close;
 
     //quarter
     @Override
