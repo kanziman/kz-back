@@ -1,6 +1,7 @@
 language: java
-jdk:
-  - openjdk17
+jdk: corretto-17
+env:
+  - JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto
 branches:
   only:
     - main
@@ -33,6 +34,8 @@ before_deploy:
 
 deploy:
   - provider: s3
+    on:
+      all_branches: true
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
     secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
     bucket: kz-build # S3 버킷
