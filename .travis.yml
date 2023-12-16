@@ -1,7 +1,6 @@
 language: java
-jdk: corretto-17
-env:
-  - JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto
+jdk:
+  - openjdk17
 branches:
   only:
     - main
