@@ -33,9 +33,6 @@ before_deploy:
 
 deploy:
   - provider: s3
-    on:
-      branche:
-        - main
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
     secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
     bucket: kz-build # S3 버킷
@@ -44,7 +41,10 @@ deploy:
     acl: private # zip 파일 접근을 private으로
     local_dir: deploy # before_deploy에서 생성한 디렉토리
     wait-until-deployed: true
-
+    on:
+      branch:
+        - main
+        -
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
     secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
@@ -56,5 +56,5 @@ deploy:
     region: ap-northeast-2
     wait-until-deployed: true
     on:
-      branche:
+      branch:
         - main
