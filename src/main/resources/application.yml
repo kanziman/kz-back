@@ -10,14 +10,14 @@ spring:
         physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     defer-datasource-initialization: true
   datasource:
-        url: jdbc:mariadb://127.0.0.1:3306/stock_db
-        username: root
-        password: test1234
-        driver-class-name: org.mariadb.jdbc.Driver
-#    url: jdbc:mysql://toolz-mariadb.ccuissfgxozr.ap-northeast-2.rds.amazonaws.com:3306/stock_db
-#    username: zorba
-#    password: zorba4you
-#    driver-class-name: org.mariadb.jdbc.Driver
+#        url: jdbc:mariadb://127.0.0.1:3306/stock_db
+#        username: root
+#        password: test1234
+#        driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://toolz-mariadb.ccuissfgxozr.ap-northeast-2.rds.amazonaws.com:3306/stock_db
+    username: zorba
+    password: zorba4you
+    driver-class-name: org.mariadb.jdbc.Driver
   h2:
     console:
       enabled: true
