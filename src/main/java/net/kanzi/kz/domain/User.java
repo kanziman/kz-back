@@ -18,10 +18,15 @@ import java.util.List;
 @Entity
 public class User implements UserDetails {
 
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id", updatable = false)
+//    private Long id;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "uuid", updatable = false)
+    private String uuid;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -32,11 +37,16 @@ public class User implements UserDetails {
     @Column(name = "nickname", unique = true)
     private String nickname;
 
+    @Column(name = "providerType")
+    private String providerType;
+
     @Builder
-    public User(String email, String password, String nickname) {
+    public User(String email, String password, String nickname, String uuid, String providerType) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+        this.uuid =uuid;
+        this.providerType =providerType;
     }
 
     public User update(String nickname) {

@@ -23,11 +23,11 @@ public class Ticker {
     private Date baseDate;
     private String fsType;
 
-    private String pbr;
-    private String per;
-    private String por;
-    private String psr;
-    private String dy;
+    private double pbr;
+    private double per;
+    private double por;
+    private double psr;
+    private double dy;
     private float value;
     private long shares;
     private long volume;
