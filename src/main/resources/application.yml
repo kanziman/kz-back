@@ -30,6 +30,7 @@ spring:
             client-id: 185065427410-bjfsa9r69usecpg5sphd95jgvnmjmguv.apps.googleusercontent.com
             client-secret: DwCl0MPcECmID0h1gxekh-xR
             scope: email, profile
+            redirect-uri: https://kanzi.kr/login/oauth2/code/google
           naver:
             client-id: 0dDQT24eEx0sfCC0yAav
             client-secret: pQYezdPOUG

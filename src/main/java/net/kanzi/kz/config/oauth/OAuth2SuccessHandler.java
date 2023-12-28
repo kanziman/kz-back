@@ -67,12 +67,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
         String targetUrl = getTargetUrl(accessToken);
 
-        System.out.println(targetUrl);
-        System.out.println(request.getRequestURL());
         clearAuthenticationAttributes(request, response);
 
-        String tmp = "http://localhost:8000" + targetUrl;
-        getRedirectStrategy().sendRedirect(request, response, tmp);
+//        String tmp = "http://localhost:8000" + targetUrl;
+//        String prod = "kanzi.kr/" + targetUrl;
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
     private void saveRefreshToken(String userId, String newRefreshToken) {
