@@ -71,6 +71,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 //        String tmp = "http://localhost:8000" + targetUrl;
 //        String prod = "kanzi.kr/" + targetUrl;
+
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
