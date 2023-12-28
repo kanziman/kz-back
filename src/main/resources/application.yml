@@ -11,14 +11,14 @@ spring:
 #      ddl-auto: update
     defer-datasource-initialization: true
   datasource:
-        url: jdbc:mariadb://127.0.0.1:3306/stock_db
-        username: root
-        password: test1234
-        driver-class-name: org.mariadb.jdbc.Driver
-#    url: jdbc:mysql://toolz-mariadb.ccuissfgxozr.ap-northeast-2.rds.amazonaws.com:3306/stock_db
-#    username: zorba
-#    password: zorba4you
-#    driver-class-name: org.mariadb.jdbc.Driver
+#        url: jdbc:mariadb://127.0.0.1:3306/stock_db
+#        username: root
+#        password: test1234
+#        driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://toolz-mariadb.ccuissfgxozr.ap-northeast-2.rds.amazonaws.com:3306/stock_db
+    username: zorba
+    password: zorba4you
+    driver-class-name: org.mariadb.jdbc.Driver
   h2:
     console:
       enabled: true
@@ -31,6 +31,7 @@ spring:
             client-secret: DwCl0MPcECmID0h1gxekh-xR
             scope: email, profile
             redirect-uri: https://kanzi.kr/login/oauth2/code/google
+
           naver:
             client-id: 0dDQT24eEx0sfCC0yAav
             client-secret: pQYezdPOUG
