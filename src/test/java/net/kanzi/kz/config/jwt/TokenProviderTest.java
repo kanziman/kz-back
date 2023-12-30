@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -90,13 +91,15 @@ class TokenProviderTest {
         // given
         String userEmail = "user@email.com";
         String token = JwtFactory.builder()
+                .claims(Map.of("id", "uuid"))
                 .subject(userEmail)
                 .build()
                 .createToken(jwtProperties);
 
         // when
         Authentication authentication = tokenProvider.getAuthentication(token);
-
+        System.out.println("authentication = " + authentication);
+        System.out.println(((UserDetails) authentication.getPrincipal()).getUsername());
         // then
         assertThat(((UserDetails) authentication.getPrincipal()).getUsername()).isEqualTo(userEmail);
     }
