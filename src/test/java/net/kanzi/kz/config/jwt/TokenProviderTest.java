@@ -105,14 +105,14 @@ class TokenProviderTest {
     @Test
     void getUserId() {
         // given
-        Long userId = 1L;
+        String userId = "1";
         String token = JwtFactory.builder()
                 .claims(Map.of("id", userId))
                 .build()
                 .createToken(jwtProperties);
 
         // when
-        Long userIdByToken = tokenProvider.getUserId(token);
+        String userIdByToken = tokenProvider.getUserId(token);
 
         // then
         assertThat(userIdByToken).isEqualTo(userId);
