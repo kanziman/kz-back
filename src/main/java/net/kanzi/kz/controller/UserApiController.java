@@ -7,6 +7,7 @@ import net.kanzi.kz.advice.DataWrapper;
 import net.kanzi.kz.domain.User;
 import net.kanzi.kz.dto.AddUserRequest;
 import net.kanzi.kz.dto.PostResponse;
+import net.kanzi.kz.dto.TagResponse;
 import net.kanzi.kz.dto.UserResponse;
 import net.kanzi.kz.service.PostService;
 import net.kanzi.kz.service.UserService;
@@ -34,6 +35,11 @@ public class UserApiController {
         return userService.save(dto);
     }
 
+    @GetMapping("/health_check")
+    public ResponseEntity<Void> getTags() {
+        return ResponseEntity.ok()
+                .build();
+    }
     @GetMapping("/api/users")
     @DataWrapper
     public UserResponse getUser() {

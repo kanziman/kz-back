@@ -69,10 +69,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         System.out.println("targetUrl = " + targetUrl);
         clearAuthenticationAttributes(request, response);
         
-        String tmp = "http://localhost:9000" + targetUrl;
-//        String prod = "kanzi.kr/" + targetUrl;
+//        String dev = "http://localhost:9000" + targetUrl;
+        String prod = "kanzi.kr/" + targetUrl;
 
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        getRedirectStrategy().sendRedirect(request, response, prod);
     }
 
     private void saveRefreshToken(String userId, String newRefreshToken) {
