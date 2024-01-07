@@ -45,7 +45,7 @@ public class CorpRepositoryImpl {
 
 
     public List<Map<String, Object>> findAllTickers(){
-        String sql = "SELECT 종목코드 as stockCode , 종목명 as stockName, 시장구분 as mktType FROM kor_ticker_today where 종목구분='보통주'";
+        String sql = "SELECT distinct 종목코드 as stockCode , 종목명 as stockName, 시장구분 as mktType FROM kor_ticker_today where 종목구분='보통주'";
         Query query = em.createNativeQuery(sql);
 
         NativeQueryImpl nativeQuery = (NativeQueryImpl) query;

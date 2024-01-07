@@ -1,7 +1,9 @@
 package net.kanzi.kz.domain;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,43 +14,48 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 @Entity
-@Table
-public class Article {
+@NoArgsConstructor
+@Getter
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    private String message;
+    private String commenter;
+    private String uid;
 
-    @Column(name = "content", nullable = false)
-    private String content;
+    @ManyToOne
+    @JoinColumn(name="post_id")
+    @JsonIgnore
+    private Post post;
 
-    @Column(name = "author", nullable = false)
-    private String author;
+
+
 
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+
     @Builder
-    public Article(String author, String title, String content) {
-        this.author = author;
-        this.title = title;
-        this.content = content;
+    public Comment(String commenter, String message, String uid) {
+        this.commenter = commenter;
+        this.message = message;
+        this.uid = uid;
     }
 
-    public void update(String title, String content) {
-        this.title = title;
-        this.content = content;
+    public Comment(Post post, String message) {
+        this.post = post;
+        this.message = message;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 }

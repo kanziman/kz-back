@@ -16,18 +16,19 @@ import java.util.List;
 @ToString
 public class User implements UserDetails {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id", updatable = false)
-//    private Long id;
-
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "uuid", updatable = false)
-    private String uuid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
+    private Long id;
+
+    @Column(name = "uid", nullable = false, unique = true)
+    private String uid;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "password")
     private String password;
@@ -39,17 +40,17 @@ public class User implements UserDetails {
     private String providerType;
 
     @Builder
-    public User(String email, String password, String nickname, String uuid, String providerType) {
+    public User(String email, String name, String password, String nickname, String uid, String providerType) {
         this.email = email;
+        this.name = name;
         this.password = password;
         this.nickname = nickname;
-        this.uuid =uuid;
+        this.uid = uid;
         this.providerType =providerType;
     }
 
     public User update(String nickname) {
         this.nickname = nickname;
-
         return this;
     }
 

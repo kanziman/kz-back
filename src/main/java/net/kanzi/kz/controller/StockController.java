@@ -40,6 +40,7 @@ public class StockController {
     public ResponseEntity getTicks(@RequestBody Map option) {
         log.info("getTicks"+option);
         Map map = corpService.findByCodeQ(option);
+        log.info("getTicks"+ map);
 
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }

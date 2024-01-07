@@ -3,9 +3,12 @@ package net.kanzi.kz.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.kanzi.kz.domain.Article;
+import net.kanzi.kz.domain.Post;
 import net.kanzi.kz.dto.AddArticleRequest;
+import net.kanzi.kz.dto.AddPostRequest;
 import net.kanzi.kz.dto.UpdateArticleRequest;
 import net.kanzi.kz.repository.BlogRepository;
+import net.kanzi.kz.repository.PostRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +23,6 @@ public class BlogService {
     public Article save(AddArticleRequest request, String userName) {
         return blogRepository.save(request.toEntity(userName));
     }
-
     public List<Article> findAll() {
         return blogRepository.findAll();
     }

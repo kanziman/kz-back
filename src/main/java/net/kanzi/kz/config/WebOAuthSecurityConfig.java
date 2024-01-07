@@ -19,8 +19,6 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
-
 @RequiredArgsConstructor
 @Configuration
 public class WebOAuthSecurityConfig {
@@ -34,23 +32,30 @@ public class WebOAuthSecurityConfig {
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
 //                .requestMatchers(toH2Console())
-                .requestMatchers("/img/**", "/css/**", "/js/**");
+                .requestMatchers("/img/**", "/css/**", "/static/js/**");
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-//                .httpBasic().disable()
-//                .formLogin().disable()
-//                .logout().disable();
+        http.csrf((csrf) -> csrf.disable())
+                .logout((logout) ->
+                        logout.deleteCookies("remove")
+                                .invalidateHttpSession(false)
+                                .logoutSuccessUrl("/")
+                ).addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        ;
 
-        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
+        http.sessionManagement((sessionManagement) ->
+                sessionManagement.sessionConcurrency((sessionConcurrency) ->
+                                sessionConcurrency.maximumSessions(1)
+                                        .expiredUrl("/")
+                        )
+        );
 
         http.authorizeRequests()
+                .requestMatchers("/api/posts/**").permitAll()
+                .requestMatchers("/api/tags").permitAll()
                 .requestMatchers("/api/proxy").permitAll()
                 .requestMatchers("/api/token").permitAll()
                 .requestMatchers("/api/ticker").permitAll()
@@ -60,22 +65,28 @@ public class WebOAuthSecurityConfig {
                 .requestMatchers("/login", "/signup", "/user").permitAll()
                 .anyRequest().permitAll();
 
-        http.oauth2Login()
-                .loginPage("/login")
-                .authorizationEndpoint()
-                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
-                .and()
+        http.oauth2Login(oauth2 -> oauth2
                 .successHandler(oAuth2SuccessHandler())
-                .userInfoEndpoint()
-                .userService(oAuth2UserCustomService);
+                .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
+                        .userService(oAuth2UserCustomService)
+                )
+        );
 
-        http.logout()
-                .logoutSuccessUrl("/login");
+//        http.oauth2Login()
+//                .loginPage("/login")
+//                .authorizationEndpoint()
+//                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
+//                .and()
+//                .successHandler(oAuth2SuccessHandler())
+//                .userInfoEndpoint()
+//                .userService(oAuth2UserCustomService);
 
-
-        http.exceptionHandling()
-                .defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
-                        new AntPathRequestMatcher("/api/**"));
+//        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//        http.logout()
+//                .logoutSuccessUrl("/login");
+//        http.exceptionHandling()
+//                .defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+//                        new AntPathRequestMatcher("/api/**"));
 
 
         return http.build();

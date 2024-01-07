@@ -7,11 +7,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Duration;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,12 +32,22 @@ class TokenProviderTest {
     @Autowired
     private JwtProperties jwtProperties;
 
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    @Test
+    void getDictName(){
+        String name = jdbcTemplate.queryForObject(
+                "SELECT name FROM Animal ORDER BY RAND() LIMIT 1",
+                String.class);
+        System.out.println("name = " + name);
+    }
     @DisplayName("generateToken(): 유저 정보와 만료 기간을 전달해 토큰을 만들 수 있다.")
     @Test
     void generateToken() {
         // given
         User testUser = userRepository.save(User.builder()
-                .uuid(UUID.randomUUID().toString())
+                .uid(UUID.randomUUID().toString())
                 .email("user@gmail.com")
                 .password("test")
                 .build());
@@ -48,9 +60,8 @@ class TokenProviderTest {
                 .setSigningKey(jwtProperties.getSecretKey())
                 .parseClaimsJws(token)
                 .getBody()
-                .get("id", String.class);
-
-        assertThat(userId).isEqualTo(testUser.getUuid());
+                .get("uid", String.class);
+        assertThat(userId).isEqualTo(testUser.getUid());
     }
 
     @DisplayName("validToken(): 만료된 토큰인 경우에 유효성 검증에 실패한다.")
@@ -91,7 +102,7 @@ class TokenProviderTest {
         // given
         String userEmail = "user@email.com";
         String token = JwtFactory.builder()
-                .claims(Map.of("id", "uuid"))
+                .claims(Map.of("uid", "uuid"))
                 .subject(userEmail)
                 .build()
                 .createToken(jwtProperties);
@@ -100,6 +111,7 @@ class TokenProviderTest {
         Authentication authentication = tokenProvider.getAuthentication(token);
         System.out.println("authentication = " + authentication);
         System.out.println(((UserDetails) authentication.getPrincipal()).getUsername());
+
         // then
         assertThat(((UserDetails) authentication.getPrincipal()).getUsername()).isEqualTo(userEmail);
     }
@@ -110,7 +122,7 @@ class TokenProviderTest {
         // given
         String userId = "1";
         String token = JwtFactory.builder()
-                .claims(Map.of("id", userId))
+                .claims(Map.of("uid", userId))
                 .build()
                 .createToken(jwtProperties);
 
