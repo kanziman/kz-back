@@ -36,8 +36,6 @@ class PostServiceTest {
     @Autowired
     protected ObjectMapper objectMapper;
     @Autowired
-    private WebApplicationContext context;
-    @Autowired
     PostRepository postRepository;
     @Autowired
     PostService postService;
@@ -51,7 +49,7 @@ class PostServiceTest {
     User user;
 
     @BeforeEach
-    void setSecurityContext() throws Exception {
+    void setSecurityContext()  {
         User user1 = createUser("uid1", "email1@com", Role.USER);
         user = userRepository.save(user1);
         SecurityContext context = SecurityContextHolder.getContext();

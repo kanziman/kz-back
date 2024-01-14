@@ -64,7 +64,7 @@ public class WebOAuthSecurityConfig {
                 .requestMatchers("/api/ticker").permitAll()
                 .requestMatchers("/api/tickers").permitAll()
                 .requestMatchers("/api/market").permitAll()
-                .requestMatchers("/api/v1/**").permitAll()
+                .requestMatchers("/api/health_check").permitAll()
                 .requestMatchers("/api/**").authenticated()
                 .requestMatchers("/login", "/signup", "/user").permitAll()
                 .anyRequest().permitAll();

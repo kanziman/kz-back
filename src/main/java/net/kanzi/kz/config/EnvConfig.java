@@ -27,7 +27,5 @@ public class EnvConfig {
         log.info("url = {}", url);
         log.info("name = {}", name);
         log.info("callBackUrl = {}", callBackUrl);
-
-
     }
 }

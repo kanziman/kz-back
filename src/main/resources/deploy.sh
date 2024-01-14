@@ -42,3 +42,8 @@ chmod +x $JAR_NAME
 
 nohup java -jar $JAR_NAME 2>&1 &
 echo "> $JAR_NAME 실행"
+
+
+java -jar -Dspring.config.location=/home/ec2-user/app/application-prod.yml \
+-Dspring.profiles.active=prod \
+ /home/ec2-user/kz-back/build/libs/kz-1.0.jar
