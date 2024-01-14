@@ -1,6 +1,8 @@
 package net.kanzi.kz.config.oauth;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.kanzi.kz.domain.Role;
 import net.kanzi.kz.domain.User;
 import net.kanzi.kz.oauth.OAuth2Dto;
 import net.kanzi.kz.oauth.ProviderType;
@@ -20,6 +22,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class OAuth2UserCustomService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
@@ -37,6 +40,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
 
     // ❷ 유저가 있으면 업데이트, 없으면 유저 생성
     private User saveOrUpdate(OAuth2User oAuth2User, String registrationId) {
+        log.info("save or update :" + oAuth2User.getName());
         ProviderType providerType = ProviderType.valueOf(registrationId.toUpperCase());
 
         Map<String, Object> attributes = oAuth2User.getAttributes();
@@ -56,6 +60,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
             user = User.builder()
                     .email(email)
                     .name(name)
+                    .roleType(Role.USER)
                     .password(new BCryptPasswordEncoder().encode("0000"))
                     .nickname(genNickName())
                     .uid(UUID.randomUUID().toString())

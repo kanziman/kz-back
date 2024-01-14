@@ -2,8 +2,8 @@ package net.kanzi.kz.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import net.kanzi.kz.advice.DataWrapper;
-import net.kanzi.kz.domain.Market;
+import net.kanzi.kz.api.ApiResponse;
+import net.kanzi.kz.domain.stock.Market;
 import net.kanzi.kz.service.CorpService;
 import net.kanzi.kz.service.MarketService;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,6 @@ public class StockController {
 
 
     @PostMapping("/api/proxy")
-    @DataWrapper
     public ResponseEntity proxyList(@RequestBody Map map) {
         List<String> lines = Arrays.asList(map.get("proxy").toString().split("\n"));
 
@@ -33,30 +32,22 @@ public class StockController {
         return ResponseEntity.status(HttpStatus.OK).body(rtn);
     }
 
-
-
     @PostMapping("/api/ticker")
-    @DataWrapper
-    public ResponseEntity getTicks(@RequestBody Map option) {
-        log.info("getTicks"+option);
+    public ApiResponse<Map> getTicks(@RequestBody Map option) {
         Map map = corpService.findByCodeQ(option);
-        log.info("getTicks"+ map);
 
-        return ResponseEntity.status(HttpStatus.OK).body(map);
+        return ApiResponse.of(HttpStatus.OK, map);
     }
     @GetMapping("/api/market")
-    @DataWrapper
-    public ResponseEntity getMarket() {
-        List<Market> all = marketService.findAll();
-
-        return ResponseEntity.status(HttpStatus.OK).body(all);
+    public ApiResponse<List<Market>> getMarket() {
+        List<Market> markets = marketService.findAll();
+        return ApiResponse.of(HttpStatus.OK, markets);
     }
 
     @GetMapping("/api/tickers")
-    @DataWrapper
-    public ResponseEntity getTickers() {
+    public ApiResponse<List<Map<String, Object>>> getTickers() {
         List<Map<String, Object>> allTicker = corpService.findAllTicker();
 
-        return ResponseEntity.status(HttpStatus.OK).body(allTicker);
+        return ApiResponse.of(HttpStatus.OK, allTicker);
     }
 }

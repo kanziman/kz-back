@@ -4,6 +4,7 @@ package net.kanzi.kz.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +14,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Comment {
+public class Comment extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,37 +25,34 @@ public class Comment {
 
     private String message;
     private String commenter;
-    private String uid;
+
+
+    @Column(name = "user_id")
+    private Long userId;
 
     @ManyToOne
-    @JoinColumn(name="post_id")
+    @JoinColumn(name="post_id", nullable = false)
     @JsonIgnore
     private Post post;
 
 
-
-
-    @CreatedDate
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-
     @Builder
-    public Comment(String commenter, String message, String uid) {
+    public Comment(String commenter, String message, Long userId, Post post) {
         this.commenter = commenter;
         this.message = message;
-        this.uid = uid;
+        this.userId = userId;
+        this.post = post;
     }
 
-    public Comment(Post post, String message) {
-        this.post = post;
+    public void change(String message){
         this.message = message;
     }
+
 
     public void setPost(Post post) {
         this.post = post;
+    }
+    public void setUserId(Long id) {
+        this.userId = id;
     }
 }

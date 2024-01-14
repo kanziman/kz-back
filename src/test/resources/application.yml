@@ -1,5 +1,7 @@
 
 spring:
+  profiles:
+    active: test
   output:
     ansi:
       enabled: always
@@ -8,16 +10,24 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 50 #최적화 옵션
+#        use_sql_comments: true
+#        dialect: org.hibernate.dialect.MySQL57Dialect
     hibernate:
       naming:
         physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-#      ddl-auto: update
+      ddl-auto: create
     defer-datasource-initialization: true
   datasource:
-    url: jdbc:mariadb://127.0.0.1:3306/stock_db
-    username: root
-    password: test1234
-    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:h2:mem:~/kz
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+#  datasource:
+#    url: jdbc:mariadb://127.0.0.1:3306/stock_db
+#    username: root
+#    password: test1234
+#    driver-class-name: org.mariadb.jdbc.Driver
   h2:
     console:
       enabled: true
@@ -64,6 +74,7 @@ jwt:
   secret_key: kanzi-boot
 server:
   port: 8080
+callBackUrl: http://localhost:9000
 
 logging:
   level:

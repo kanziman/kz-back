@@ -3,8 +3,8 @@ package net.kanzi.kz.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
-import net.kanzi.kz.domain.Ticker;
-import net.kanzi.kz.domain.TickerQ;
+import net.kanzi.kz.domain.stock.Ticker;
+import net.kanzi.kz.domain.stock.TickerQ;
 import org.hibernate.query.sql.internal.NativeQueryImpl;
 import org.hibernate.transform.AliasToEntityMapResultTransformer;
 import org.springframework.stereotype.Repository;
@@ -26,7 +26,6 @@ public class CorpRepositoryImpl {
         String del = "delete from proxy";
         Query query = em.createNativeQuery(del);
         int delRows = query.executeUpdate();
-        System.out.println("delRows = " + delRows);
 
         String sql = "INSERT INTO proxy (ip) VALUES (?)";
         query = em.createNativeQuery(sql);
@@ -36,7 +35,6 @@ public class CorpRepositoryImpl {
             query.setParameter(1, proxy.get(i));
             insRows += query.executeUpdate();
         }
-        System.out.println("insRows = " + insRows);
 
         Map map = new HashMap();
         map.put("count",insRows);
@@ -56,7 +54,6 @@ public class CorpRepositoryImpl {
     }
 
     public  List<Ticker> findByCode(String stockCode) {
-        System.out.println("code here = " + stockCode);
         return em.createQuery("select t from Ticker t where t.stockCode = :stockCode", Ticker.class)
                 .setMaxResults(6000)
                 .setParameter("stockCode", stockCode)

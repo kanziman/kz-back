@@ -13,17 +13,17 @@ public class PostRequestDto
     private int page;
     private int size;
     private String category ;
-    private int limit;
     private String sort;
     private String[] tags;
     private String keyword;
-
+    private int offset;
     public PostRequestDto() {
         this.page = 1;
         this.size = 10;
         this.sort = "createdAt";
         this.category = "All";
         this.keyword = "";
+        this.offset = (this.getPage() - 1) * this.getSize();
     }
 
     public Pageable getPageable(Sort sort){

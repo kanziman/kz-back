@@ -12,6 +12,8 @@ import net.kanzi.kz.oauth.OAuth2Dto;
 import net.kanzi.kz.repository.RefreshTokenRepository;
 import net.kanzi.kz.service.UserService;
 import net.kanzi.kz.util.CookieUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -41,6 +43,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
     private final UserService userService;
 
+    @Value("${callBackUrl}")
+    private String callBackUrl;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -65,11 +70,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         addRefreshTokenToCookie(request, response, refreshToken);
 
         String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
-        String targetUrl = getTargetUrl(accessToken);
-        System.out.println("targetUrl = " + targetUrl);
+        String targetUrl = getTargetUrl(accessToken, user.getUid());
+
         clearAuthenticationAttributes(request, response);
-        
-//        String dev = "http://localhost:9000" + targetUrl;
+
+        if( (callBackUrl) != null) {
+            targetUrl = (callBackUrl) + targetUrl;
+        }
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
@@ -94,9 +101,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
 
-    private String getTargetUrl(String token) {
+    private String getTargetUrl(String token, String uid) {
         return UriComponentsBuilder.fromUriString(REDIRECT_PATH)
                 .queryParam("token", token)
+                .queryParam("uid", uid)
                 .build()
                 .toUriString();
     }

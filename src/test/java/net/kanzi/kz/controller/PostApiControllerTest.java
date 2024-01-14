@@ -1,218 +1,135 @@
 package net.kanzi.kz.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import net.kanzi.kz.domain.Article;
-import net.kanzi.kz.domain.Post;
-import net.kanzi.kz.domain.Tag;
-import net.kanzi.kz.domain.User;
-import net.kanzi.kz.dto.*;
-import net.kanzi.kz.dto.post.PostRequestDto;
-import net.kanzi.kz.repository.BlogRepository;
-import net.kanzi.kz.repository.PostRepository;
-import net.kanzi.kz.repository.TagRepository;
-import net.kanzi.kz.repository.UserRepository;
-import net.kanzi.kz.service.PostService;
-import org.junit.jupiter.api.BeforeEach;
+import net.kanzi.kz.ControllerTestSupport;
+import net.kanzi.kz.dto.post.AddPostRequest;
+import net.kanzi.kz.dto.post.PostResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class PostApiControllerTest {
 
-    @Autowired
-    protected MockMvc mockMvc;
-
-    @Autowired
-    protected ObjectMapper objectMapper;
-
-    @Autowired
-    private WebApplicationContext context;
-
-    @Autowired
-    PostRepository postRepository;
-
-    @Autowired
-    PostService postService;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    TagRepository tagRepository;
-
-    User user;
-
-    @BeforeEach
-    public void mockMvcSetup(){
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-    }
-
-    @BeforeEach
-    void setSecurityContext() {
-        userRepository.deleteAll();
-        user = userRepository.save(User.builder()
-                .email("user@gmail.com")
-                .password("test")
-                .uid(UUID.randomUUID().toString())
-                .build());
-
-        SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()));
-    }
+class PostApiControllerTest  extends ControllerTestSupport {
 
 
+    @DisplayName("새글을 등록한다.")
     @Test
-    public void findTagsWithCount() throws Exception {
+    void createPost() throws Exception {
 
-        List<TagResponse> topTags = tagRepository.getTopTags(PageRequest.of(0, 10));
-        topTags.forEach(o-> System.out.println("o.getName() = " + o.getName()));
+        //given
+//        User user = userRepository.save(User.builder()
+//                .email("user@gmail.com")
+//                .password("test")
+//                .roleType(Role.USER)
+//                .uid(UUID.randomUUID().toString())
+//                .build());
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        context.setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()));
 
-    }
-    @Test
-    public void findAllWithTags(PostRequestDto request) throws Exception {
-
-        List<Post> posts = postRepository.findAllWithTags(request);
-
-        for (Post post : posts) {
-            Set<Tag> tags = post.getTags(); // tags already fetched
-        }
-
-        List<PostResponse> collect = posts.stream()
-                .map(Post::toDTO).collect(Collectors.toList());
-
-        for (PostResponse response : collect) {
-            System.out.println("response = " + response);
-        }
-
-    }
-
-    public PostResponse toDTO(Post post){
-        PostResponse build = PostResponse.builder()
-                .title(post.getTitle())
-                .content(post.getContent())
-                .uid(post.getUid())
-                .category(post.getCategory())
-                .tags(post.getTags().stream()
-                        .map(Tag::getName)
-                        .collect(Collectors.toList()))
+        given(postService.addPost(any(AddPostRequest.class)))
+                .willReturn(PostResponse.builder()
+                        .id(1L)
+                        .title("제목을 기재합니다.")
+                        .uid("3a727380-bca1-4aa1-b65d-8f887f7202ee")
+                        .content("내용을 기재합니다.")
+                        .category("NOTICE")
+                        .tags(List.of("삼성","현대"))
+                        .nickName("돌고래1231")
+                        .photoURL("bear.com")
+                        .createdAt(LocalDateTime.now())
+                        .build()
+                );
+        Principal principal = () -> "user@gmail.com";
+        AddPostRequest request = AddPostRequest.builder()
+                .title("t").content("c").category("cate")
                 .build();
-        return build;
-    }
 
-    @DisplayName("addArticle: post and tag 조회에 성공한다.")
+        // when // then
+        mockMvc.perform(
+                        post("/api/posts")
+                                .principal(principal)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+    @DisplayName("새글을 등록할 때 제목은 필수값이다.")
     @Test
-    public void getPostWithTag() throws Exception {
+    void createPostWithoutTitle() throws Exception {
+        //given
+        AddPostRequest request = AddPostRequest.builder()
+                .content("c")
+                .category("cate")
+                .build();
 
-        // given
-        final String url = "/api/posts";
-        final String title = "title";
-        final String content = "content";
-        final String category = "notice";
-        final String[] tags = {"태그1","태그2"};
-        AddPostRequest request = new AddPostRequest(title, content, category, tags);
-
-        Post post = request.toEntity("userName");
-        if ( request.getTags() != null ){
-            post.addTags(request);
-        }
-        Post save = postRepository.save(post);
-        System.out.println("save = " + save);
-
-        Post selcted = postRepository.getPostWithTags(save.getId());
-        System.out.println("selcted = " + selcted);
-
+        // when // then
+        mockMvc.perform(
+                        post("/api/posts")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("제목은 필수입니다."))
+                .andExpect(jsonPath("$.data").isEmpty());
     }
-
-    @DisplayName("addArticle: post and tag 추가에 성공한다.")
+    @DisplayName("새글을 등록할 때 내용은 필수값이다.")
     @Test
-    @Transactional
-    public void getPost() throws Exception {
+    void createPostWithoutContent() throws Exception {
+        //given
+        AddPostRequest request = AddPostRequest.builder()
+                .title("t")
+                .category("cate")
+                .build();
 
-        // given
-        final String url = "/api/posts";
-        final String title = "title";
-        final String content = "content";
-        final String category = "notice";
-        final String[] tags = {"태그1","태그2"};
-        final AddPostRequest userRequest = new AddPostRequest(title, content, category, tags);
-
-        final String requestBody = objectMapper.writeValueAsString(userRequest);
-        Principal principal = Mockito.mock(Principal.class);
-        Mockito.when(principal.getName()).thenReturn("username");
-
-        // when
-        ResultActions result = mockMvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .principal(principal)
-                .content(requestBody));
-        System.out.println("result = " + result);
-        // then
-        result.andExpect(status().isCreated());
+        // when // then
+        mockMvc.perform(
+                        post("/api/posts")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("내용은 필수입니다."))
+                .andExpect(jsonPath("$.data").isEmpty());
     }
-    @DisplayName("addArticle: post 추가에 성공한다.")
+    @DisplayName("새글을 등록할 때 카테고리는 필수값이다.")
     @Test
-    public void addPost() throws Exception {
+    void createPostWithoutType() throws Exception {
+        //given
+        AddPostRequest request = AddPostRequest.builder()
+                .title("t")
+                .content("c")
+                .build();
 
-        // given
-        final String url = "/api/posts";
-        final String title = "title";
-        final String content = "content";
-        final String category = "notice";
-        final String[] tags = null;
-        final AddPostRequest userRequest = new AddPostRequest(title, content, category, tags);
-
-        final String requestBody = objectMapper.writeValueAsString(userRequest);
-        System.out.println("requestBody = " + requestBody);
-        Principal principal = Mockito.mock(Principal.class);
-        Mockito.when(principal.getName()).thenReturn("username");
-
-        // when
-        ResultActions result = mockMvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .principal(principal)
-                .content(requestBody));
-
-        // then
-        result.andExpect(status().isCreated());
-
-        List<Post> posts = postRepository.findAll();
-
-        assertThat(posts.get(0).getTitle()).isEqualTo(title);
-        assertThat(posts.get(0).getContent()).isEqualTo(content);
+        // when // then
+        mockMvc.perform(
+                        post("/api/posts")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("카테고리는 필수입니다."))
+                .andExpect(jsonPath("$.data").isEmpty());
     }
 
-
-    @Test
-    @Transactional
-    public void testDeleteTag(){
-        Post post = postRepository.getPostWithTags(44L);
-        System.out.println("post = " + post);
-        tagRepository.deleteTagsByPost(post);
-    }
 
 }

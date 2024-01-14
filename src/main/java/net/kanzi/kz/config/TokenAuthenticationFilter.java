@@ -31,8 +31,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         if (tokenProvider.validToken(token)) {
             Authentication authentication = tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        } else {
-            System.out.println("### invalid token");
         }
 
         filterChain.doFilter(request, response);

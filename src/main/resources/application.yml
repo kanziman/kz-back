@@ -1,5 +1,7 @@
 
 spring:
+  profiles:
+    active: local
   output:
     ansi:
       enabled: always
@@ -8,20 +10,22 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 100 #최적화 옵션
+
     hibernate:
       naming:
         physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 #      ddl-auto: update
     defer-datasource-initialization: true
   datasource:
-#    url: jdbc:mariadb://127.0.0.1:3306/stock_db
-#    username: root
-#    password: test1234
-#    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mysql://toolz-mariadb.ccuissfgxozr.ap-northeast-2.rds.amazonaws.com:3306/stock_db
-    username: zorba
-    password: zorba4you
+    url: jdbc:mariadb://127.0.0.1:3306/stock_db
+    username: root
+    password: test1234
     driver-class-name: org.mariadb.jdbc.Driver
+#    url: jdbc:mysql://toolz-mariadb.ccuissfgxozr.ap-northeast-2.rds.amazonaws.com:3306/stock_db
+#    username: zorba
+#    password: zorba4you
+#    driver-class-name: org.mariadb.jdbc.Driver
   h2:
     console:
       enabled: true
@@ -69,7 +73,10 @@ jwt:
 server:
   port: 8080
 
+callBackUrl:
+
 logging:
   level:
     org.springframework.security: trace
-    org.hibernate.orm.jdbc.bind: trace
+#    org.hibernate.orm.jdbc.bind: trace
+#    org.hibernate.SQL: debug

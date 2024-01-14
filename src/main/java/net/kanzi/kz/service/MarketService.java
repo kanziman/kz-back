@@ -1,7 +1,7 @@
 package net.kanzi.kz.service;
 
 import lombok.RequiredArgsConstructor;
-import net.kanzi.kz.domain.Market;
+import net.kanzi.kz.domain.stock.Market;
 import net.kanzi.kz.repository.MarketRepository;
 import org.springframework.stereotype.Service;
 

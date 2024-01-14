@@ -1,0 +1,20 @@
+[[comment-create]]
+=== 댓글 작성
+
+==== HTTP Request
+include::{snippets}/comment-create/http-request.adoc[]
+include::{snippets}/comment-create/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/comment-create/http-response.adoc[]
+include::{snippets}/comment-create/response-fields.adoc[]
+
+=== 댓글 조회(목록)
+
+==== HTTP Request
+include::{snippets}/comment-findList/http-request.adoc[]
+
+==== HTTP Response
+include::{snippets}/comment-findList/http-response.adoc[]
+include::{snippets}/comment-findList/response-fields.adoc[]
+

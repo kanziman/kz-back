@@ -1,20 +1,20 @@
 package net.kanzi.kz.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@ToString
-public class User implements UserDetails {
+//@ToString(exclude = {"bookMarks", "likes"})
+public class User extends BaseEntity implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,10 @@ public class User implements UserDetails {
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     @Column(name = "name")
     private String name;
@@ -39,14 +43,21 @@ public class User implements UserDetails {
     @Column(name = "providerType")
     private String providerType;
 
+//    @OneToMany(mappedBy = "user")
+//    private List<BookMark> bookMarks = new ArrayList<>();
+//    @OneToMany(mappedBy = "user")
+//    private List<Likes> likes = new ArrayList<>();
+
+
     @Builder
-    public User(String email, String name, String password, String nickname, String uid, String providerType) {
+    private User(String email, String name, String password, String nickname, String uid, String providerType, Role roleType) {
         this.email = email;
         this.name = name;
         this.password = password;
         this.nickname = nickname;
         this.uid = uid;
         this.providerType =providerType;
+        this.role = roleType;
     }
 
     public User update(String nickname) {
@@ -58,9 +69,6 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if ("hwanghkt@naver.com".equals(this.getUsername())) {
-            return List.of(new SimpleGrantedAuthority("user"),new SimpleGrantedAuthority("admin"));
-        }
         return List.of(new SimpleGrantedAuthority("user"));
     }
 

@@ -9,6 +9,7 @@ import net.kanzi.kz.repository.RefreshTokenRepository;
 import net.kanzi.kz.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -27,6 +28,7 @@ public class WebOAuthSecurityConfig {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserService userService;
+    public final Environment env;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -55,12 +57,14 @@ public class WebOAuthSecurityConfig {
 
         http.authorizeRequests()
                 .requestMatchers("/api/posts/**").permitAll()
+                .requestMatchers("/api/users/**").permitAll()
                 .requestMatchers("/api/tags").permitAll()
                 .requestMatchers("/api/proxy").permitAll()
                 .requestMatchers("/api/token").permitAll()
                 .requestMatchers("/api/ticker").permitAll()
                 .requestMatchers("/api/tickers").permitAll()
                 .requestMatchers("/api/market").permitAll()
+                .requestMatchers("/api/v1/**").permitAll()
                 .requestMatchers("/api/**").authenticated()
                 .requestMatchers("/login", "/signup", "/user").permitAll()
                 .anyRequest().permitAll();

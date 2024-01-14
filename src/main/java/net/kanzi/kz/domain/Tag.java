@@ -3,14 +3,12 @@ package net.kanzi.kz.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor
 @Getter
+@ToString(exclude = {"post"})
 public class Tag {
 
     @Id
@@ -35,5 +33,6 @@ public class Tag {
 
     public void setPost(Post post) {
         this.post = post;
+        post.getTags().add(this);
     }
 }

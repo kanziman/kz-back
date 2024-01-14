@@ -1,0 +1,31 @@
+[[post-create]]
+=== 새글 작성
+
+==== HTTP Request
+include::{snippets}/post-create/http-request.adoc[]
+include::{snippets}/post-create/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/post-create/http-response.adoc[]
+include::{snippets}/post-create/response-fields.adoc[]
+
+=== 글 조회(단건)
+
+==== HTTP Request
+include::{snippets}/post-findOne/http-request.adoc[]
+
+==== HTTP Response
+include::{snippets}/post-findOne/http-response.adoc[]
+include::{snippets}/post-findOne/response-fields.adoc[]
+
+
+=== 글 조회(목록)
+
+==== HTTP Request
+include::{snippets}/post-findList/http-request.adoc[]
+include::{snippets}/post-findList/query-parameters.adoc[]
+
+==== HTTP Response
+include::{snippets}/post-findList/http-response.adoc[]
+include::{snippets}/post-findList/response-fields.adoc[]
+

@@ -1,7 +1,7 @@
 package net.kanzi.kz.service;
 
 import lombok.RequiredArgsConstructor;
-import net.kanzi.kz.domain.Ticker;
+import net.kanzi.kz.domain.stock.Ticker;
 import net.kanzi.kz.repository.CorpRepository;
 import net.kanzi.kz.repository.CorpRepositoryImpl;
 import org.springframework.stereotype.Service;

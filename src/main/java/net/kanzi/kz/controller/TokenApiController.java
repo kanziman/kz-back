@@ -1,8 +1,8 @@
 package net.kanzi.kz.controller;
 
 import lombok.RequiredArgsConstructor;
-import net.kanzi.kz.dto.CreateAccessTokenRequest;
-import net.kanzi.kz.dto.CreateAccessTokenResponse;
+import net.kanzi.kz.dto.user.CreateAccessTokenRequest;
+import net.kanzi.kz.dto.user.CreateAccessTokenResponse;
 import net.kanzi.kz.service.TokenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,5 +1,6 @@
 package net.kanzi.kz.dto.post;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,23 +16,22 @@ public class PageResultDTO<DTO, EN> {
     //DTO리스트
     private List<DTO> dtoList;
 
-    //총 페이지 번호
+    //총 페이지
     private int totalPage;
     private Long totalElements;
 
     //현재 페이지 번호
-    private int page;
     //목록 사이즈
     private int size;
+    private int page;
 
     //시작 페이지 번호, 끝 페이지 번호
-    private int start, end;
-
     //이전, 다음
-    private boolean prev, next;
-
     //페이지 번호  목록
-    private List<Integer> pageList;
+//    private List<Integer> pageList;
+//    private boolean prev, next;
+//    private int start, end;
+
 
     public PageResultDTO(Page<EN> result, Function<EN,DTO> fn ){
 
@@ -40,12 +40,16 @@ public class PageResultDTO<DTO, EN> {
         totalPage = result.getTotalPages();
         totalElements = result.getTotalElements();
 
-        makePageList(result.getPageable());
+//        makePageList(result.getPageable());
     }
 
-    public PageResultDTO() {
+    @Builder
+    public PageResultDTO(List<DTO> dtoList, int totalPage, Long totalElements, int page) {
+        this.dtoList = dtoList;
+        this.totalPage = totalPage;
+        this.totalElements = totalElements;
+        this.page = page;
     }
-
 
     private void makePageList(Pageable pageable){
 
@@ -55,15 +59,12 @@ public class PageResultDTO<DTO, EN> {
         //temp end page
         int tempEnd = (int)(Math.ceil(page/10.0)) * 10;
 
-        start = tempEnd - 9;
-
-        prev = start > 1;
-
-        end = totalPage > tempEnd ? tempEnd: totalPage;
-
-        next = totalPage > tempEnd;
-
-        pageList = IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
+//        start = tempEnd - 9;
+//        prev = start > 1;
+//        end = totalPage > tempEnd ? tempEnd: totalPage;
+//        next = totalPage > tempEnd;
+//
+//        pageList = IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
 
     }
 
