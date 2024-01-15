@@ -23,7 +23,7 @@ fi
 echo "> start! ${TARGET_PORT}."
 chmod +x /home/ec2-user/app/step4/zip/build/libs/kz-1.0.jar
 
-nohup java -jar -Dserver.port=${TARGET_PORT} \
+nohup ~/.sdkman/candidates/java/current/bin/java -jar -Dserver.port=${TARGET_PORT} \
 -Dspring.config.location=/home/ec2-user/app/application-prod.yml \
 -Dspring.profiles.active=prod \
  /home/ec2-user/app/step4/zip/build/libs/kz-1.0.jar > /home/ec2-user/nohup.out 2>&1 &
