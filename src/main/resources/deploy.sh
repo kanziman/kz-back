@@ -46,4 +46,9 @@ echo "> $JAR_NAME 실행"
 
 java -jar -Dspring.config.location=/home/ec2-user/app/application-prod.yml \
 -Dspring.profiles.active=prod \
- /home/ec2-user/kz-back/build/libs/kz-1.0.jar
+ /home/ec2-user/app/step3/zip/build/libs/kz-1.0.jar
+
+java -jar -Dserver.port=8081 \
+-Dspring.config.location=/home/ec2-user/app/application-prod.yml \
+-Dspring.profiles.active=prod \
+ /home/ec2-user/app/step3/zip/build/libs/kz-1.0.jar
