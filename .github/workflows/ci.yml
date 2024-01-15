@@ -15,9 +15,14 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
-      - name: Set Test Profile
-        run: echo "spring.profiles.active=test" > application-test.yml
 
+      - name: Run tests with H2
+        run: ./gradlew test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
+          SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
+          SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.H2Dialect
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
 #      - name: Set YML
 #        run: |
 #          mkdir -p src/main/resources
