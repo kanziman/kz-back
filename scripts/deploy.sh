@@ -4,7 +4,7 @@ REPOSITORY=/home/ec2-user/app/step4
 PROJECT_NAME=kz-app
 
 echo "> START"
-~/.sdkman/candidates/java/current/bin/java -jar -Dserver.port=8082 \
+java -jar -Dserver.port=8082 \
 -Dspring.config.location=/home/ec2-user/app/application-prod.yml \
 -Dspring.profiles.active=prod \
  /home/ec2-user/app/step4/zip/build/libs/kz-1.0.jar
