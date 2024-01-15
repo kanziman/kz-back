@@ -16,7 +16,7 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
       - name: Set Test Profile
-        run: echo "spring.profiles.active=test" > application.properties
+        run: echo "spring.profiles.active=test" > application-test.yml
 
 #      - name: Set YML
 #        run: |
