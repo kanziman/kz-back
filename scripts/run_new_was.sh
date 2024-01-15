@@ -21,12 +21,12 @@ if [ ! -z ${TARGET_PID} ]; then
 fi
 
 echo "> start! ${TARGET_PORT}."
-ls /home/ec2-user/app/step3/zip/build/libs/kz-1.0.jar
+ls /home/ec2-user/app/step4/zip/build/libs/kz-1.0.jar
 
 nohup java -jar -Dserver.port=${TARGET_PORT} \
 -Dspring.config.location=/home/ec2-user/app/application-prod.yml \
 -Dspring.profiles.active=prod \
- /home/ec2-user/app/step3/zip/build/libs/kz-1.0.jar > /home/ec2-user/nohup.out 2>&1 &
+ /home/ec2-user/app/step4/zip/build/libs/kz-1.0.jar > /home/ec2-user/nohup.out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
 curl -s -o /dev/null -w "%{http_code}"  http://127.0.0.1:8082/health_check
 echo "> END"
