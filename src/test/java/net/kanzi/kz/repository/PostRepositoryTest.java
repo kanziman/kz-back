@@ -65,6 +65,7 @@ class PostRepositoryTest {
                 .forEach(t -> tagSet.add(t));
 
         return Post.builder()
+                .uid("3a727380-bca1-4aa1-b65d-8f887f7202ee")
                 .title(title)
                 .content(content)
                 .category(category)
