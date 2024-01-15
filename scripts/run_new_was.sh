@@ -21,7 +21,7 @@ if [ ! -z ${TARGET_PID} ]; then
 fi
 
 echo "> start! ${TARGET_PORT}."
-ls /home/ec2-user/app/step4/zip/build/libs/kz-1.0.jar
+chmod +x /home/ec2-user/app/step4/zip/build/libs/kz-1.0.jar
 
 nohup java -jar -Dserver.port=${TARGET_PORT} \
 -Dspring.config.location=/home/ec2-user/app/application-prod.yml \
