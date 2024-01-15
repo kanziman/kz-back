@@ -65,6 +65,7 @@ public class PostResponse {
                                 .collect(Collectors.toList())
                 )
                 .readCount(post.getReadCount())
+                .likeCount(post.getLikeCount())
                 .bookmarkCount(post.getBookMarkCount())
                 .nickName(post.getUser().getNickname())
                 .photoURL(Constants.PHOTO_URL + post.getUser().getUid())

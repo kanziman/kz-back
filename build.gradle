@@ -103,6 +103,9 @@ bootJar {
     }
 }
 
+jar {
+    enabled = false
+}
 
 sourceSets {
     main {
