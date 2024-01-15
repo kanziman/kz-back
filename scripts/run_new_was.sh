@@ -20,10 +20,11 @@ if [ ! -z ${TARGET_PID} ]; then
   sudo kill ${TARGET_PID}
 fi
 
+echo "> start! ${TARGET_PORT}."
 nohup java -jar -Dserver.port=${TARGET_PORT} \
 -Dspring.config.location=/home/ec2-user/app/application-prod.yml \
 -Dspring.profiles.active=prod \
- /home/ec2-user/app/step3/zip/build/libs/* > /home/ec2-user/nohup.out 2>&1 &
+ /home/ec2-user/app/step3/zip/build/libs/kz-1.0.jar > /home/ec2-user/nohup.out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0
 
