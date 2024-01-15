@@ -26,6 +26,8 @@ nohup java -jar -Dserver.port=${TARGET_PORT} \
 -Dspring.profiles.active=prod \
  /home/ec2-user/app/step3/zip/build/libs/kz-1.0.jar > /home/ec2-user/nohup.out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
+curl -s -o /dev/null -w "%{http_code}"  http://127.0.0.1:8082/health_check
+echo "> END"
 exit 0
 
 
