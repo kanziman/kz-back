@@ -6,7 +6,7 @@ on:
 
 env: # 새로 추가한 부분
   S3_BUCKET_NAME: kz-build
-  PROJECT_NAME: kz-back
+  PROJECT_NAME: kz
 
 jobs:
   build:
@@ -21,30 +21,24 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
-#      - name: Set YML
-#        run: |
-#          mkdir -p src/main/resources
-#          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
-#          find src
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build with Gradle
         run: ./gradlew clean build
 
-      - name: Get current time
-        uses: josStorer/get-current-time@v2.0.2
-        id: current-time
-        with:
-          format: YYYY-MM-DDTHH-mm-ss
-          utcOffset: "+09:00"
+#      - name: Get current time
+#        uses: josStorer/get-current-time@v2.0.2
+#        id: current-time
+#        with:
+#          format: YYYY-MM-DDTHH-mm-ss
+#          utcOffset: "+09:00"
 
 #      - name: Set artifact
 #        run: echo "artifact=$(ls ./build/libs)" >> $GITHUB_ENV
 
       - name: Make zip file
-        run: zip -r -x ./$GITHUB_SHA.zip .
+        run: zip -r ./$GITHUB_SHA.zip .
         shell: bash
 
       - name: Configure AWS credentials
