@@ -77,7 +77,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         if( (callBackUrl) != null) {
             targetUrl = (callBackUrl) + targetUrl;
         }
-
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 

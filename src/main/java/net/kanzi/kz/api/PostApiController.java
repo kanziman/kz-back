@@ -88,7 +88,7 @@ public class PostApiController {
     }
 
     // == TAG
-    @GetMapping("/api/tags")
+    @GetMapping("/api/posts/tags")
     public ApiResponse<List<TagResponse>> getTopTags() {
         List<TagResponse> tags = postService.getTopTags();
         return ApiResponse.of(HttpStatus.OK, tags) ;

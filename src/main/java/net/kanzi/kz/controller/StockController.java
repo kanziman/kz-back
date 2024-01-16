@@ -24,7 +24,7 @@ public class StockController {
     private final MarketService marketService;
 
 
-    @PostMapping("/api/proxy")
+    @PostMapping("/api/stock/proxy")
     public ResponseEntity proxyList(@RequestBody Map map) {
         List<String> lines = Arrays.asList(map.get("proxy").toString().split("\n"));
 
@@ -32,19 +32,19 @@ public class StockController {
         return ResponseEntity.status(HttpStatus.OK).body(rtn);
     }
 
-    @PostMapping("/api/ticker")
+    @PostMapping("/api/stock/ticker")
     public ApiResponse<Map> getTicks(@RequestBody Map option) {
         Map map = corpService.findByCodeQ(option);
 
         return ApiResponse.of(HttpStatus.OK, map);
     }
-    @GetMapping("/api/market")
+    @GetMapping("/api/stock/market")
     public ApiResponse<List<Market>> getMarket() {
         List<Market> markets = marketService.findAll();
         return ApiResponse.of(HttpStatus.OK, markets);
     }
 
-    @GetMapping("/api/tickers")
+    @GetMapping("/api/stock/tickers")
     public ApiResponse<List<Map<String, Object>>> getTickers() {
         List<Map<String, Object>> allTicker = corpService.findAllTicker();
 

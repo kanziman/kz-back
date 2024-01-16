@@ -29,6 +29,7 @@ public class UserApiController {
     public ApiResponse<UserResponse> updateUser(@Valid @RequestBody UpdateUserRequest dto) {
         userService.update(dto.getUid(), dto.getNickName());
         UserResponse userResponse = new UserResponse(userService.findByUid(dto.getUid()));
+
         return ApiResponse.of(HttpStatus.OK, userResponse);
 
     }
@@ -36,7 +37,8 @@ public class UserApiController {
     @GetMapping("/api/users/{uid}")
     public ApiResponse<UserResponse> getUser(@PathVariable String uid) {
         User user = userService.findByUid(uid);
-        return ApiResponse.of(HttpStatus.OK, new UserResponse(user));
+        UserResponse userResponse = new UserResponse(user);
+        return ApiResponse.of(HttpStatus.OK, userResponse);
     }
 
     @GetMapping("/api/users/{uid}/bookMarks")
