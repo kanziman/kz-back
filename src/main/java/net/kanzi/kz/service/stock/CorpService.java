@@ -1,28 +1,35 @@
-package net.kanzi.kz.service;
+package net.kanzi.kz.service.stock;
 
 import lombok.RequiredArgsConstructor;
-import net.kanzi.kz.domain.stock.Ticker;
-import net.kanzi.kz.repository.CorpRepository;
-import net.kanzi.kz.repository.CorpRepositoryImpl;
+import net.kanzi.kz.dto.stock.TickerListResponse;
+import net.kanzi.kz.dto.stock.TickerRequest;
+import net.kanzi.kz.repository.stock.CorpRepositoryImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class CorpService {
     private final CorpRepositoryImpl corpRepository;
-    private final CorpRepository jpaRepository;
 
-    public List<Ticker> findByCode(String code) {
-        return corpRepository.findByCode(code);
+    public Map findByCodeQ(TickerRequest request) {
+        return corpRepository.findByCodeQ(request);
     }
-    public Map findByCodeQ(Map code) {
-        return corpRepository.findByCodeQ(code);
-    }
-    public List<Map<String, Object>> findAllTicker() {
-        return corpRepository.findAllTickers();
+    public List<TickerListResponse> findAllTicker() {
+        List<Map<String, String>> allTickers = corpRepository.findAllTickers();
+
+        return allTickers.stream()
+                .map(t -> TickerListResponse.builder()
+                        .stockCode(t.get("stockCode"))
+                        .stockName(t.get("stockName"))
+                        .mktType(t.get("mktType"))
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public Map insertProxy(List proxy) {

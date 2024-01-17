@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -18,7 +18,7 @@ public class TickerQ {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String stockCode;
-    private Date baseDate;
+    private LocalDateTime baseDate;
     private String indicator;
     private Double value;
     private Double close;

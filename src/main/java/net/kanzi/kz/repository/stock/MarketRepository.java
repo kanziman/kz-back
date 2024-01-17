@@ -1,4 +1,4 @@
-package net.kanzi.kz.repository;
+package net.kanzi.kz.repository.stock;
 
 import net.kanzi.kz.domain.stock.Market;
 import org.springframework.data.jpa.repository.JpaRepository;

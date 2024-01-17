@@ -3,9 +3,11 @@ package net.kanzi.kz.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.kanzi.kz.api.ApiResponse;
-import net.kanzi.kz.domain.stock.Market;
-import net.kanzi.kz.service.CorpService;
-import net.kanzi.kz.service.MarketService;
+import net.kanzi.kz.dto.stock.MarketResponse;
+import net.kanzi.kz.dto.stock.TickerListResponse;
+import net.kanzi.kz.dto.stock.TickerRequest;
+import net.kanzi.kz.service.stock.CorpService;
+import net.kanzi.kz.service.stock.MarketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,20 +35,20 @@ public class StockController {
     }
 
     @PostMapping("/api/stock/ticker")
-    public ApiResponse<Map> getTicks(@RequestBody Map option) {
+    public ApiResponse<Map> getTicks(@RequestBody TickerRequest option) {
         Map map = corpService.findByCodeQ(option);
 
         return ApiResponse.of(HttpStatus.OK, map);
     }
     @GetMapping("/api/stock/market")
-    public ApiResponse<List<Market>> getMarket() {
-        List<Market> markets = marketService.findAll();
-        return ApiResponse.of(HttpStatus.OK, markets);
+    public ApiResponse<List<MarketResponse>> getMarket() {
+        List<MarketResponse> marketResponses = marketService.findAll();
+        return ApiResponse.of(HttpStatus.OK, marketResponses);
     }
 
     @GetMapping("/api/stock/tickers")
-    public ApiResponse<List<Map<String, Object>>> getTickers() {
-        List<Map<String, Object>> allTicker = corpService.findAllTicker();
+    public ApiResponse<List<TickerListResponse>> getTickers() {
+        List<TickerListResponse> allTicker = corpService.findAllTicker();
 
         return ApiResponse.of(HttpStatus.OK, allTicker);
     }

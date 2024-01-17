@@ -3,66 +3,59 @@ package net.kanzi.kz.dto.stock;
 import lombok.Builder;
 import lombok.Getter;
 import net.kanzi.kz.domain.stock.Market;
+import net.kanzi.kz.domain.stock.Ticker;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class MarketResponse {
+public class TickerResponse {
 
     private Long id;
     private LocalDateTime baseDate;
-    private String mktType;
-    private Float open;
-    private Float high;
-    private Float low;
-    private Float close;
-    private Double volume;
-    private Double amount;
-    private Double value;
+    private String stockCode;
+    private String fsType;
     private Float per;
     private Float pbr;
+    private Float psr;
+    private Float por;
     private Float dy;
-    private Double credit;
-    private Double deposit;
-    private Float adr;
+    private Double value;
+    private Long shares;
+    private Long volume;
+    private Double close;
+
     @Builder
-    public MarketResponse(Long id, LocalDateTime baseDate, String mktType, Float open, Float high, Float low, Float close, Double volume, Double amount, Double value, Float per, Float pbr, Float dy, Double credit, Double deposit, Float adr) {
+    public TickerResponse(Long id, LocalDateTime baseDate, String stockCode, String fsType, Float per, Float pbr, Float por,Float psr, Float dy, Double value, Long shares, Long volume, Double close) {
         this.id = id;
         this.baseDate = baseDate;
-        this.mktType = mktType;
-        this.open = open;
-        this.high = high;
-        this.low = low;
-        this.close = close;
-        this.volume = volume;
-        this.amount = amount;
-        this.value = value;
+        this.stockCode = stockCode;
+        this.fsType = fsType;
         this.per = per;
         this.pbr = pbr;
+        this.psr = psr;
+        this.por = por;
         this.dy = dy;
-        this.credit = credit;
-        this.deposit = deposit;
-        this.adr = adr;
+        this.value = value;
+        this.shares = shares;
+        this.volume = volume;
+        this.close = close;
     }
 
-    public static MarketResponse of(Market market){
-        return MarketResponse.builder()
-                .id(market.getId())
-                .baseDate(market.getBaseDate())
-                .mktType(market.getMktType())
-                .open(market.getOpen())
-                .high(market.getHigh())
-                .low(market.getLow())
-                .close(market.getClose())
-                .volume(market.getVolume())
-                .amount(market.getAmount())
-                .value(market.getValue())
-                .per(market.getPer() )
-                .pbr(market.getPbr())
-                .dy(market.getDy())
-                .credit(market.getCredit())
-                .deposit(market.getDeposit())
-                .adr(market.getAdr())
+    public static TickerResponse of(Ticker ticker){
+        return TickerResponse.builder()
+                .id(ticker.getId())
+                .baseDate(ticker.getBaseDate())
+                .stockCode(ticker.getStockCode())
+                .fsType(ticker.getFsType())
+                .per(ticker.getPer())
+                .pbr(ticker.getPbr())
+                .psr(ticker.getPsr())
+                .por(ticker.getPor())
+                .dy(ticker.getDy())
+                .value(ticker.getValue())
+                .shares(ticker.getShares())
+                .volume(ticker.getVolume())
+                .close(ticker.getClose())
                 .build();
     }
 

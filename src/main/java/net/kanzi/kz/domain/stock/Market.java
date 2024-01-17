@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,20 +16,20 @@ public class Market {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date baseDate;
+    private LocalDateTime baseDate;
     private String mktType;
     private Float open;
     private Float high;
     private Float low;
     private Float close;
-    private Float volume;
-    private Float amount;
-    private Float value;
+    private Double volume;
+    private Double amount;
+    private Double value;
     private Float fValue;
     private Float per;
     private Float pbr;
     private Float dy;
-    private Float credit;
-    private Float deposit;
+    private Double credit;
+    private Double deposit;
     private Float adr;
 }
