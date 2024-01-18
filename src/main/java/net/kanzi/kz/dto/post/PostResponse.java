@@ -70,6 +70,7 @@ public class PostResponse {
                 .nickName(post.getUser().getNickname())
                 .photoURL(Constants.PHOTO_URL + post.getUser().getUid())
                 .commentCount(post.getComments().size())
+                .createdAt(post.getCreatedAt())
                 .build();
     }
 }
