@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import net.kanzi.kz.domain.Post;
 import net.kanzi.kz.domain.Role;
+import net.kanzi.kz.domain.Tag;
 import net.kanzi.kz.domain.User;
+import net.kanzi.kz.dto.TagResponse;
 import net.kanzi.kz.dto.post.AddPostRequest;
 import net.kanzi.kz.dto.post.PostResponse;
 import net.kanzi.kz.dto.post.PageResultDTO;
@@ -19,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +30,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -208,5 +213,29 @@ class PostServiceTest {
                 .contains("tt", "cc", "cate");
 
     }
+
+    @DisplayName("상위 5개 태그를 조회할 수 있다.")
+    @Test
+    public void getTopTags() throws Exception {
+        //given
+        for (int i = 0; i < 10; i++) {
+            String[] tags = new String[]{String.format("tag%d", i)};
+            AddPostRequest request = AddPostRequest.builder()
+                    .title("t").content("c").category("cate")
+                    .tags(tags)
+                    .build();
+            postService.addPost(request);
+        }
+
+        // when
+        List<TagResponse> topTags = tagRepository.getTopTags();
+        List<TagResponse> responses = topTags.stream()
+                .limit(5)
+                .collect(Collectors.toList());
+
+        // then
+        assertThat(responses).hasSize(5);
+    }
+
 
 }

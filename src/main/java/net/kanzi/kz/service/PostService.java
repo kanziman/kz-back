@@ -210,7 +210,7 @@ public class PostService {
 
 
     public List<TagResponse> getTopTags(){
-        List<TagResponse> topTags = tagRepository.getTopTags(PageRequest.of(0, 10));
+        List<TagResponse> topTags = tagRepository.getTopTags();
         return topTags;
     }
 

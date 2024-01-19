@@ -12,8 +12,8 @@ import java.util.List;
 public interface TagRepository extends JpaRepository<Tag, Long>  {
 
 
-    @Query("SELECT NEW net.kanzi.kz.dto.TagResponse(t.name, COUNT(t)) FROM Tag t GROUP BY t.name order by COUNT(t) LIMIT 10")
-    List<TagResponse> getTopTags(Pageable page);
+    @Query("SELECT NEW net.kanzi.kz.dto.TagResponse(t.name, COUNT(t)) FROM Tag t GROUP BY t.name order by COUNT(t) desc")
+    List<TagResponse> getTopTags();
 
     @Modifying
     void deleteAllInBatch();
