@@ -61,16 +61,17 @@ public class WebOAuthSecurityConfig {
                         )
         );
 
+
         http.authorizeRequests()
-                .requestMatchers(HttpMethod.GET).permitAll()
-                .requestMatchers("/api/posts/**").hasRole("USER")
-                .requestMatchers("/api/users/**").hasRole("USER")
+                .requestMatchers("/api/posts/**").permitAll()
+                .requestMatchers("/api/users/**").permitAll()
                 .requestMatchers("/api/stock/**").permitAll()
                 .requestMatchers("/api/token").permitAll()
                 .requestMatchers("/api/health_check").permitAll()
                 .requestMatchers("/api/**").authenticated()
                 .requestMatchers("/login", "/signup", "/user").permitAll()
                 .anyRequest().permitAll();
+
 
         http.oauth2Login(oauth2 -> oauth2
                 .successHandler(oAuth2SuccessHandler())

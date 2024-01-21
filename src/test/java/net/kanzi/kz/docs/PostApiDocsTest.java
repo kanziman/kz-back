@@ -1,10 +1,9 @@
 package net.kanzi.kz.docs;
 
-import net.kanzi.kz.api.PostApiController;
+import net.kanzi.kz.apiController.PostApiController;
 import net.kanzi.kz.dto.post.AddPostRequest;
 import net.kanzi.kz.dto.post.PageResultDTO;
 import net.kanzi.kz.dto.post.PostResponse;
-import net.kanzi.kz.repository.UserRepository;
 import net.kanzi.kz.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

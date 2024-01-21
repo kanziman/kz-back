@@ -1,10 +1,9 @@
 package net.kanzi.kz;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.kanzi.kz.api.CommentApiController;
-import net.kanzi.kz.api.PostApiController;
-import net.kanzi.kz.api.UserApiController;
-import net.kanzi.kz.config.jwt.JwtProperties;
+import net.kanzi.kz.apiController.CommentApiController;
+import net.kanzi.kz.apiController.PostApiController;
+import net.kanzi.kz.apiController.UserApiController;
 import net.kanzi.kz.repository.UserRepository;
 import net.kanzi.kz.service.CommentService;
 import net.kanzi.kz.service.PostService;

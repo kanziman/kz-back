@@ -1,26 +1,16 @@
 package net.kanzi.kz.docs;
 
-import net.kanzi.kz.api.CommentApiController;
-import net.kanzi.kz.api.PostApiController;
-import net.kanzi.kz.domain.Comment;
-import net.kanzi.kz.domain.Role;
-import net.kanzi.kz.domain.User;
+import net.kanzi.kz.apiController.CommentApiController;
 import net.kanzi.kz.dto.comment.AddCommentRequest;
 import net.kanzi.kz.dto.comment.CommentResponse;
-import net.kanzi.kz.dto.post.AddPostRequest;
-import net.kanzi.kz.dto.post.PageResultDTO;
-import net.kanzi.kz.dto.post.PostResponse;
 import net.kanzi.kz.service.CommentService;
-import net.kanzi.kz.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -28,7 +18,6 @@ import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

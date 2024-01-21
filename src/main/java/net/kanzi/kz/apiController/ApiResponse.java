@@ -1,11 +1,10 @@
-package net.kanzi.kz.api;
+package net.kanzi.kz.apiController;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 public class ApiResponse<T> {

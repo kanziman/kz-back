@@ -1,8 +1,7 @@
-package net.kanzi.kz.controller;
+package net.kanzi.kz.apiController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import net.kanzi.kz.api.ApiResponse;
 import net.kanzi.kz.dto.stock.MarketResponse;
 import net.kanzi.kz.dto.stock.TickerListResponse;
 import net.kanzi.kz.dto.stock.TickerRequest;
@@ -19,7 +18,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @Log4j2
-@CrossOrigin("*")
 public class StockController {
 
     private final CorpService corpService;

@@ -1,4 +1,4 @@
-package net.kanzi.kz.api;
+package net.kanzi.kz.apiController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

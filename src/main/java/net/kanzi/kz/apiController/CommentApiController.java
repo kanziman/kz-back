@@ -1,11 +1,9 @@
-package net.kanzi.kz.api;
+package net.kanzi.kz.apiController;
 
 import lombok.RequiredArgsConstructor;
-import net.kanzi.kz.dto.*;
 import net.kanzi.kz.dto.comment.AddCommentRequest;
 import net.kanzi.kz.dto.comment.CommentResponse;
 import net.kanzi.kz.service.CommentService;
-import net.kanzi.kz.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +12,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin("*")
 public class CommentApiController {
 
 //    private final PostService postService;
