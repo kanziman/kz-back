@@ -1,4 +1,4 @@
-package net.kanzi.kz.config;
+package net.kanzi.kz.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

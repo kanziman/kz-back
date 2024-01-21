@@ -3,20 +3,17 @@ package net.kanzi.kz.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.kanzi.kz.domain.*;
+import net.kanzi.kz.domain.exception.EntityNotFoundException;
+import net.kanzi.kz.domain.exception.NotAuthorizedUserException;
 import net.kanzi.kz.dto.*;
-import net.kanzi.kz.dto.comment.AddCommentRequest;
-import net.kanzi.kz.dto.comment.CommentResponse;
-import net.kanzi.kz.dto.post.AddPostRequest;
-import net.kanzi.kz.dto.post.PageResultDTO;
-import net.kanzi.kz.dto.post.PostRequestDto;
-import net.kanzi.kz.dto.post.PostResponse;
+import net.kanzi.kz.dto.post.*;
 import net.kanzi.kz.repository.*;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -34,6 +31,7 @@ public class PostService {
     private final LikeRepository likeRepository;
     private final BookMarkRepository bookMarkRepository;
 
+    // v1
     public List<PostResponse> getAllPostByUser(User user) {
         List<Post> posts = postRepository.findAllByUser(user);
         return posts.stream()
@@ -63,15 +61,11 @@ public class PostService {
 
     /**
      * CREATE POST
-     *
-     * @param userName
-     * @return id
      */
 
     public PostResponse addPost(AddPostRequest request) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("not found : " + email));
+        String uid = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = getUser(uid);
 
         // dto -> post
         Post post = request.toEntity();
@@ -88,8 +82,7 @@ public class PostService {
      * @param id
      */
     public PostResponse findById(long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("not found : " + id));
+        Post post = getPost(id);
         post.upReadCount();
 
         return PostResponse.of(post);
@@ -100,12 +93,12 @@ public class PostService {
      * @param id
      */
 
-    public void delete(long id, String email) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("not found : " + id));
+    @Transactional(readOnly = false)
+    public void delete(long id, String uid) {
 
-        authorizeArticleAuthor(post, email);
-        postRepository.delete(post);
+        Post post = getPost(id);
+        authorizeArticleAuthor(post, uid);
+        postRepository.deleteById(id);
     }
 
     /**
@@ -116,22 +109,18 @@ public class PostService {
      * @return
      */
     @Transactional(readOnly = false)
-    public PostResponse update(long id, AddPostRequest request) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("not found : " + id));
+    public PostResponse update(long id, UpdatePostRequest request, String uid) {
 
-        authorizeArticleAuthor(post, email);
+        Post post = getPost(id);
+        authorizeArticleAuthor(post, uid);
 
         // 기존 태그 삭제
-//        tagRepository.deleteTagsByPost(post);
         tagRepository.deleteAllInBatch(post.getTags());
-
         // update
-        post.update(request);
+        Post updatePost = request.toEntity();
+        post.change(updatePost);
 
-        PostResponse postResponse = PostResponse.of(post);
-        return postResponse;
+        return PostResponse.of(post);
     }
 
 
@@ -141,35 +130,27 @@ public class PostService {
      */
     @Transactional(readOnly = false)
     public void addLike(long postId, String uid) {
-        User user = userRepository.findByUid(uid)
-                .orElseThrow(() -> new IllegalArgumentException("not found user : " + uid));
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("not found post : " + postId));
+        User user = getUser(uid);
+        Post post = getPost(postId);
 
-        Optional<Likes> hasLike = likeRepository.getLike(post, user);
+        Likes hasLike = likeRepository.getLike(post, user);
 
-        Likes like = new Likes(post, user);
-        if (hasLike.isPresent()){
-            log.debug("like delete");
-            Likes likes = hasLike.get();
-            likeRepository.delete(likes);
-            post.updateLikeCount(-1);
-        } else {
-            log.debug("like insert");
+        if (hasLike == null) {
+            Likes like = new Likes(post, user);
             likeRepository.save(like);
             post.updateLikeCount(1);
+        } else {
+            likeRepository.delete(hasLike);
+            post.updateLikeCount(-1);
         }
 
     }
     public boolean hasLike(long postId, String uid) {
-        User user = userRepository.findByUid(uid)
-                .orElseThrow(() -> new IllegalArgumentException("not found user : " + uid));
+        User user = getUser(uid);
+        Post post = getPost(postId);
 
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("not found post : " + postId));
-
-        Optional<Likes> hasLike = likeRepository.getLike(post, user);
-        return hasLike.isPresent();
+        Likes like = likeRepository.getLike(post, user);
+        return like != null;
     }
 
     /**
@@ -178,50 +159,54 @@ public class PostService {
     @Transactional(readOnly = false)
     public void addBookMark(long postId, String uid) {
 
-        User user = userRepository.findByUid(uid)
-                .orElseThrow(() -> new IllegalArgumentException("not found user : " + uid));
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("not found post : " + postId));
+        User user = getUser(uid);
+        Post post = getPost(postId);
 
-        Optional<BookMark> hasBookMark = bookMarkRepository.getBookMark(post, user);
+        BookMark hasBookMark = bookMarkRepository.getBookMark(post, user);
 
-        BookMark bookMark = new BookMark(post, user);
-        if (hasBookMark.isPresent()){
-            BookMark mark = hasBookMark.get();
-            bookMarkRepository.delete(mark);
-            post.updateBookMarkCount(-1);
-        } else {
+        if (hasBookMark == null) {
+            BookMark bookMark = new BookMark(post, user);
             bookMarkRepository.save(bookMark);
             post.updateBookMarkCount(1);
+        } else {
+            bookMarkRepository.delete(hasBookMark);
+            post.updateBookMarkCount(-1);
         }
-
-    }
-    public boolean hasBookMark(long postId, String uid) {
-
-        User user = userRepository.findByUid(uid)
-                .orElseThrow(() -> new IllegalArgumentException("not found user : " + uid));
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("not found post : " + postId));
-
-        Optional<BookMark> hasBookMark = bookMarkRepository.getBookMark(post, user);
-        return hasBookMark.isPresent();
     }
 
-
-
+    /**
+     * TAG
+     */
     public List<TagResponse> getTopTags(){
         List<TagResponse> topTags = tagRepository.getTopTags();
         return topTags;
     }
 
 
-    // 게시글을 작성한 유저인지 확인
-    private void authorizeArticleAuthor(Post post, String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("not found user : " + email));
 
-        if (!post.getUid().equals(user.getUid())) {
-            throw new IllegalArgumentException("not authorized");
+    private Post getPost(long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("not found post : " + postId));
+    }
+    private User getUser(String uid) {
+        return userRepository.findByUid(uid)
+                .orElseThrow(() -> new EntityNotFoundException("not found user : " + uid));
+    }
+
+    public boolean hasBookMark(long postId, String uid) {
+
+        User user = getUser(uid);
+        Post post = getPost(postId);
+
+        BookMark bookMark = bookMarkRepository.getBookMark(post, user);
+        return bookMark != null;
+    }
+
+
+    // 게시글을 작성한 유저인지 확인
+    private void authorizeArticleAuthor(Post post, String uid) {
+        if (!post.getUid().equals(uid)) {
+            throw new NotAuthorizedUserException("not authorized");
         }
     }
 

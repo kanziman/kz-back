@@ -33,13 +33,13 @@ class TokenProviderTest {
 
     @DisplayName("유저 정보와 만료 기간을 전달해 토큰을 만들 수 있다.")
     @Test
-    void generateToken() {
+    void generateTokenWith() {
         // given
         User testUser = userRepository.save(User.builder()
                 .uid(UUID.randomUUID().toString())
                 .email("user@gmail.com")
                 .password("test")
-                .roleType(Role.USER)
+                .roleType(Role.ADMIN)
                 .build());
 
         // when
@@ -50,7 +50,13 @@ class TokenProviderTest {
                 .setSigningKey(jwtProperties.getSecretKey())
                 .parseClaimsJws(token)
                 .getBody()
-                .get("uid", String.class);
+                .getSubject();
+//                .get("uid", String.class);
+        String role = Jwts.parser()
+                .setSigningKey(jwtProperties.getSecretKey())
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
         assertThat(userId).isEqualTo(testUser.getUid());
     }
 
@@ -93,6 +99,7 @@ class TokenProviderTest {
         String userEmail = "user@email.com";
         String token = JwtFactory.builder()
                 .claims(Map.of("uid", "uuid"))
+                .claims(Map.of("email", userEmail))
                 .subject(userEmail)
                 .build()
                 .createToken(jwtProperties);

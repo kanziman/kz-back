@@ -8,11 +8,4 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CorpRepository extends JpaRepository<Ticker, Long> {
-
-//    @Query("select new net.kanzi.kz.dto.stock.TickerListResponse(t.종목코드, t.종목명, t.시장구분) " +
-//            "from kor_ticker_today t ")
-//    List<TickerListResponse> findTickerList();
-
-
-
 }

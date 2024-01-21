@@ -5,20 +5,22 @@ import net.kanzi.kz.config.jwt.TokenProvider;
 import net.kanzi.kz.config.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import net.kanzi.kz.config.oauth.OAuth2SuccessHandler;
 import net.kanzi.kz.config.oauth.OAuth2UserCustomService;
+import net.kanzi.kz.filter.TokenAuthenticationFilter;
 import net.kanzi.kz.repository.RefreshTokenRepository;
 import net.kanzi.kz.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @RequiredArgsConstructor
 @Configuration
@@ -33,20 +35,24 @@ public class WebOAuthSecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
-//                .requestMatchers(toH2Console())
+                .requestMatchers(toH2Console())
                 .requestMatchers("/img/**", "/css/**", "/static/js/**");
     }
+    @Bean
+    public RoleHierarchy roleHierarchy() {
 
+        RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
+
+        hierarchy.setHierarchy("ROLE_ADMIN > ROLE_MANAGER\n" +
+                "ROLE_MANAGER > ROLE_USER");
+
+        return hierarchy;
+    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf((csrf) -> csrf.disable())
-                .logout((logout) ->
-                        logout.deleteCookies("remove")
-                                .invalidateHttpSession(false)
-                                .logoutSuccessUrl("/")
-                ).addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 
-        ;
+        http.csrf((csrf) -> csrf.disable())
+                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.sessionManagement((sessionManagement) ->
                 sessionManagement.sessionConcurrency((sessionConcurrency) ->
@@ -56,8 +62,9 @@ public class WebOAuthSecurityConfig {
         );
 
         http.authorizeRequests()
-                .requestMatchers("/api/posts/**").permitAll()
-                .requestMatchers("/api/users/**").permitAll()
+                .requestMatchers(HttpMethod.GET).permitAll()
+                .requestMatchers("/api/posts/**").hasRole("USER")
+                .requestMatchers("/api/users/**").hasRole("USER")
                 .requestMatchers("/api/stock/**").permitAll()
                 .requestMatchers("/api/token").permitAll()
                 .requestMatchers("/api/health_check").permitAll()

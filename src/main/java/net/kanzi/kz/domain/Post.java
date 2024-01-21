@@ -2,6 +2,7 @@ package net.kanzi.kz.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import net.kanzi.kz.dto.post.AddPostRequest;
 import org.hibernate.annotations.DynamicInsert;
@@ -22,6 +23,7 @@ public class Post extends BaseEntity {
     private Long id;
 
     @Column(name = "title", nullable = false)
+    @Size(min = 1, max = 40)
     private String title;
 
     @Column(name = "content", nullable = false)
@@ -53,15 +55,10 @@ public class Post extends BaseEntity {
     @Column(name = "book_mark_count")
     private int bookMarkCount;
 
-//    @CreatedDate
-//    @Column(name = "created_at")
-//    private LocalDateTime createdAt;
-//    @LastModifiedDate
-//    @Column(name = "updated_at")
-//    private LocalDateTime updatedAt;
 
     @Builder
-    private Post(String title, String content, String uid, String category, Set<Tag> tags, User user) {
+    private Post(Long id, String title, String content, String uid, String category, Set<Tag> tags, User user) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.uid = uid;
@@ -99,17 +96,14 @@ public class Post extends BaseEntity {
     }
 
     //==연간관계 매서드==//
-    public void update(AddPostRequest request) {
+    public void change(Post request) {
         this.title = request.getTitle();
         this.content = request.getContent();
         this.category = request.getCategory();
 
         if (request.getTags() != null ){
-            Arrays.stream(request.getTags())
-                    .map(Tag::new)
-                    .forEach(t -> this.addTag(t));
+            request.getTags().forEach(t -> this.addTag(t));
         }
-//        addTags(request);
     }
 
     public void addTag(Tag tag) {

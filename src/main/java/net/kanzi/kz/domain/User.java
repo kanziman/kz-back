@@ -9,11 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
-@Table(name = "users")
+@Table(name = "Users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-//@ToString(exclude = {"bookMarks", "likes"})
 public class User extends BaseEntity implements UserDetails{
 
     @Id
@@ -43,14 +42,10 @@ public class User extends BaseEntity implements UserDetails{
     @Column(name = "providerType")
     private String providerType;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<BookMark> bookMarks = new ArrayList<>();
-//    @OneToMany(mappedBy = "user")
-//    private List<Likes> likes = new ArrayList<>();
-
-
     @Builder
-    private User(String email, String name, String password, String nickname, String uid, String providerType, Role roleType) {
+    private User(String email, String name, String password, String nickname, String uid, String providerType
+            , Role roleType
+    ) {
         this.email = email;
         this.name = name;
         this.password = password;
@@ -64,7 +59,6 @@ public class User extends BaseEntity implements UserDetails{
         this.nickname = nickname;
         return this;
     }
-
 
 
     @Override

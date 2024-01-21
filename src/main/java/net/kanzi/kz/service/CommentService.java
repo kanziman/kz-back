@@ -5,6 +5,8 @@ import lombok.extern.log4j.Log4j2;
 import net.kanzi.kz.domain.Comment;
 import net.kanzi.kz.domain.Post;
 import net.kanzi.kz.domain.User;
+import net.kanzi.kz.domain.exception.EntityNotFoundException;
+import net.kanzi.kz.domain.exception.NotAuthorizedUserException;
 import net.kanzi.kz.dto.comment.AddCommentRequest;
 import net.kanzi.kz.dto.comment.CommentResponse;
 import net.kanzi.kz.repository.CommentRepository;
@@ -32,7 +34,7 @@ public class CommentService {
 
     public List<CommentResponse> findCommentByPostId(long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("not found : " + postId));
+                .orElseThrow(() -> new EntityNotFoundException("not found : " + postId));
         List<CommentResponse> commentsWithCommenter = commentRepository.getCommentsWithCommenter(post);
 
         return commentsWithCommenter;
@@ -42,11 +44,11 @@ public class CommentService {
      * SAVE COMMENTS
      */
     public Long addComment(AddCommentRequest request, Long postId) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("not found : " + email));
+        String uid = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUid(uid)
+                .orElseThrow(() -> new EntityNotFoundException("not found : " + uid));
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("not found : " + postId));
+                .orElseThrow(() -> new EntityNotFoundException("not found : " + postId));
 
         Comment entity = request.toEntity();
         entity.setPost(post);
@@ -63,7 +65,7 @@ public class CommentService {
     public Long updateComment(AddCommentRequest request, Long commentId) {
 
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("not found : " + commentId));
+                .orElseThrow(() -> new EntityNotFoundException("not found : " + commentId));
 
         authorizeCommentAuthor(comment);
 
@@ -78,19 +80,21 @@ public class CommentService {
     @Transactional(readOnly = false)
     public void deleteComment(long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("not found : " + commentId));
+                .orElseThrow(() -> new EntityNotFoundException("not found : " + commentId));
 
         authorizeCommentAuthor(comment);
         commentRepository.delete(comment);
     }
 
     private void authorizeCommentAuthor(Comment comment) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("not found user : " + email));
+        String uid = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUid(uid)
+                .orElseThrow(() -> new EntityNotFoundException("not found : " + uid));
 
         if (!comment.getCommenter().equals(user.getUid())) {
-            throw new IllegalArgumentException("not authorized");
+            throw new NotAuthorizedUserException("not authorized");
         }
     }
+
+
 }

@@ -26,16 +26,6 @@ class PostApiControllerTest  extends ControllerTestSupport {
     @Test
     void createPost() throws Exception {
 
-        //given
-//        User user = userRepository.save(User.builder()
-//                .email("user@gmail.com")
-//                .password("test")
-//                .roleType(Role.USER)
-//                .uid(UUID.randomUUID().toString())
-//                .build());
-//        SecurityContext context = SecurityContextHolder.getContext();
-//        context.setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()));
-
         given(postService.addPost(any(AddPostRequest.class)))
                 .willReturn(PostResponse.builder()
                         .id(1L)
@@ -130,6 +120,9 @@ class PostApiControllerTest  extends ControllerTestSupport {
                 .andExpect(jsonPath("$.message").value("카테고리는 필수입니다."))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
+
+
+
 
 
 }

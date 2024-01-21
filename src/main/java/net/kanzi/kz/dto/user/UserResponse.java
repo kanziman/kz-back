@@ -3,11 +3,8 @@ package net.kanzi.kz.dto.user;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import net.kanzi.kz.domain.Article;
-import net.kanzi.kz.domain.Role;
 import net.kanzi.kz.domain.User;
 import net.kanzi.kz.util.Constants;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
 

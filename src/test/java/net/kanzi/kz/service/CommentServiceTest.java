@@ -58,7 +58,7 @@ class CommentServiceTest {
         User user1 = createUser("uid1", "email1@com", Role.USER);
         user = userRepository.save(user1);
         SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()));
+        context.setAuthentication(new UsernamePasswordAuthenticationToken(user.getUid(), user.getEmail(), user.getAuthorities()));
     }
     @AfterEach
     void tearDown(){

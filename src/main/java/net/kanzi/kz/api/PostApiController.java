@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.kanzi.kz.dto.AddBookMarkRequest;
 import net.kanzi.kz.dto.AddLikeRequest;
 import net.kanzi.kz.dto.TagResponse;
-import net.kanzi.kz.dto.post.AddPostRequest;
-import net.kanzi.kz.dto.post.PostResponse;
-import net.kanzi.kz.dto.post.PageResultDTO;
-import net.kanzi.kz.dto.post.PostRequestDto;
+import net.kanzi.kz.dto.post.*;
 import net.kanzi.kz.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +16,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin("*")
 public class PostApiController {
 
     private final PostService postService;
@@ -51,8 +47,10 @@ public class PostApiController {
     }
 
     @PatchMapping("/api/posts/{id}")
-    public ResponseEntity<PostResponse> putPost(@PathVariable long id, @RequestBody AddPostRequest request) {
-        PostResponse response = postService.update(id, request);
+    public ResponseEntity<PostResponse> putPost(@PathVariable long id, @RequestBody UpdatePostRequest request
+    ,Principal principal
+    ) {
+        PostResponse response = postService.update(id, request, principal.getName());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);

@@ -14,7 +14,7 @@ public interface LikeRepository extends JpaRepository<Likes, Long>  {
 
     @Query("select l from Likes l JOIN Post p on l.post = p JOIN User u on l.user = :user " +
             "WHERE p = :post ")
-    Optional<Likes> getLike(@Param("post") Post post, @Param("user") User user);
+    Likes getLike(@Param("post") Post post, @Param("user") User user);
 
     @Query("select p from Likes l JOIN Post p on l.post = p JOIN User u on l.user = :user ")
     List<Post> getUserLikesPosts(@Param("user") User user);

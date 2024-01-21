@@ -3,6 +3,7 @@ package net.kanzi.kz.oauth;
 
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
+import net.kanzi.kz.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -16,7 +17,7 @@ import java.util.Map;
 @Setter
 @ToString
 @NoArgsConstructor
-public class OAuth2Dto implements OAuth2User {
+public class OAuth2Dto  implements OAuth2User {
 
     private Map<String, Object> attributes;
     private String name;
@@ -72,6 +73,6 @@ public class OAuth2Dto implements OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
+        return null;
     }
 }

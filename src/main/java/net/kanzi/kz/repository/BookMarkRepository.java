@@ -17,7 +17,7 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long>  {
 
     @Query("select l from BookMark l JOIN Post p on l.post = p JOIN User u on l.user = :user " +
             "WHERE p = :post ")
-    Optional<BookMark> getBookMark(@Param("post") Post post, @Param("user") User user);
+    BookMark getBookMark(@Param("post") Post post, @Param("user") User user);
 
     @Query("select p from BookMark l JOIN Post p on l.post = p JOIN User u on l.user = :user ")
     List<Post> getUserBookMarksPosts(@Param("user") User user);

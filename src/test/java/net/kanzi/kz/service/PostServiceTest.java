@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import net.kanzi.kz.domain.Post;
 import net.kanzi.kz.domain.Role;
-import net.kanzi.kz.domain.Tag;
 import net.kanzi.kz.domain.User;
+import net.kanzi.kz.domain.exception.EntityNotFoundException;
+import net.kanzi.kz.domain.exception.NotAuthorizedUserException;
 import net.kanzi.kz.dto.TagResponse;
-import net.kanzi.kz.dto.post.AddPostRequest;
-import net.kanzi.kz.dto.post.PostResponse;
-import net.kanzi.kz.dto.post.PageResultDTO;
-import net.kanzi.kz.dto.post.PostRequestDto;
+import net.kanzi.kz.dto.post.*;
 import net.kanzi.kz.repository.PostRepository;
 import net.kanzi.kz.repository.TagRepository;
 import net.kanzi.kz.repository.UserRepository;
@@ -21,17 +19,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
-import java.util.*;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -54,11 +49,11 @@ class PostServiceTest {
     User user;
 
     @BeforeEach
-    void setSecurityContext()  {
+    void setSecurityContext() throws Exception {
         User user1 = createUser("uid1", "email1@com", Role.USER);
         user = userRepository.save(user1);
         SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()));
+        context.setAuthentication(new UsernamePasswordAuthenticationToken(user.getUid(), user.getEmail(), user.getAuthorities()));
     }
     @AfterEach
     void tearDown(){
@@ -67,6 +62,16 @@ class PostServiceTest {
         userRepository.deleteAllInBatch();
     }
 
+
+    @DisplayName("존재하지 않는 상품 id로 조회하면 EntityNotFoundException이 발생해야한다.")
+    @Test
+    public void getPostWIthWrongId() throws Exception {
+        // when
+        // then
+        assertThatThrownBy(()->postService.findById(100L))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("not found");
+    }
     @Test
     @DisplayName("로그인한 유저는 글을 작성할 수 있다.")
     public void createPost() {
@@ -179,7 +184,7 @@ class PostServiceTest {
 
         // when then
         assertThatThrownBy(()->postService.delete(postResponse.getId(), other.getEmail()))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(NotAuthorizedUserException.class)
                 .hasMessage("not authorized");
     }
 
@@ -195,13 +200,14 @@ class PostServiceTest {
         PostResponse postResponse = postService.addPost(request);
 
         String[] newTags = new String[]{"tag3"};
-        AddPostRequest newRequest = AddPostRequest.builder()
+        UpdatePostRequest updatePostRequest = UpdatePostRequest.builder()
+                .id(postResponse.getId())
                 .title("tt").content("cc").category("cate")
                 .tags(newTags)
                 .build();
 
         // when
-        postService.update(postResponse.getId(), newRequest);
+        postService.update(postResponse.getId(), updatePostRequest, user.getUid());
 
         // then
         PostResponse response = postService.findById(postResponse.getId());

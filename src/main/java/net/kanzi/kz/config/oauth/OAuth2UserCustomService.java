@@ -7,9 +7,7 @@ import net.kanzi.kz.domain.User;
 import net.kanzi.kz.oauth.OAuth2Dto;
 import net.kanzi.kz.oauth.ProviderType;
 import net.kanzi.kz.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -17,7 +15,6 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -31,13 +28,14 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
     private final JdbcTemplate jdbcTemplate;
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User user = super.loadUser(userRequest); // ❶ 요청을 바탕으로 유저 정보를 담은 객체 반환
+        OAuth2User user = super.loadUser(userRequest);
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
         User savedUser = saveOrUpdate(user,registrationId);
-//        saveOrUpdate(user);
-
-        return user;
+        return OAuth2Dto.builder()
+                .name(savedUser.getName())
+                .email(savedUser.getEmail())
+                .build();
     }
 
     // ❷ 유저가 있으면 업데이트, 없으면 유저 생성
@@ -51,7 +49,6 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
         );
 
         OAuth2Dto oAuth2Dto = OAuth2Dto.of(providerType, oAuth2User.getAttributes());
-//           throw new OAuth2AuthenticationException("유효하지 않습니다. 다른 방식으로 로그인 해주세요.");
         String email = oAuth2Dto.getEmail();
         String name = oAuth2Dto.getName();
 

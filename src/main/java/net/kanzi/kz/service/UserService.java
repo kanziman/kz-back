@@ -8,6 +8,8 @@ import net.kanzi.kz.dto.post.PostResponse;
 import net.kanzi.kz.repository.BookMarkRepository;
 import net.kanzi.kz.repository.LikeRepository;
 import net.kanzi.kz.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
@@ -78,5 +80,11 @@ public class UserService {
             log.info(e.getMessage());
         }
         return responses;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("userdetail service laodUserByUsername" + username);
+        return null;
     }
 }

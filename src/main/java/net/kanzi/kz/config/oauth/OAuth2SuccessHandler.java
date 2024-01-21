@@ -3,7 +3,6 @@ package net.kanzi.kz.config.oauth;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import net.kanzi.kz.config.jwt.TokenProvider;
 import net.kanzi.kz.domain.RefreshToken;
@@ -13,20 +12,13 @@ import net.kanzi.kz.repository.RefreshTokenRepository;
 import net.kanzi.kz.service.UserService;
 import net.kanzi.kz.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
@@ -48,20 +40,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        OAuth2Dto principal = (OAuth2Dto) authentication.getPrincipal();
 
-        String email = "";
-        if (oAuth2User.getAttribute("response") != null) { //NAVER
-            Map<String, Object> res = oAuth2User.getAttribute("response");
-            email = (String) res.get("email");
-        }
-        if (oAuth2User.getAttribute("kakao_account") != null) { //KAKAO
-            Map<String, Object> res = oAuth2User.getAttribute("kakao_account");
-            email = (String) res.get("email");
-        }
-        if (oAuth2User.getAttributes().get("email") != null){   //GOOGLE
-            email = (String) oAuth2User.getAttributes().get("email");
-        }
+        String email = principal.getEmail();
 
         User user = userService.findByEmail(email);
 

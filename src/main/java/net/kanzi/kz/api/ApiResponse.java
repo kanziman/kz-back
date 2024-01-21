@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class ApiResponse<T> {
@@ -28,7 +29,6 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> of(HttpStatus httpStatus, String message, T data) {
         return new ApiResponse<>(httpStatus, message, data);
     }
-
     public static <T> ApiResponse<T> of(HttpStatus httpStatus, T data) {
         return of(httpStatus, httpStatus.name(), data);
     }

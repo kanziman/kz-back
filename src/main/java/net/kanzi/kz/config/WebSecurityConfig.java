@@ -1,7 +1,6 @@
 package net.kanzi.kz.config;
 
 import lombok.RequiredArgsConstructor;
-import net.kanzi.kz.service.UserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
