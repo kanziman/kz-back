@@ -5,7 +5,10 @@
   <a href="https://kanzi.kr" target=_blank>
     <img src="https://github.com/forthezorba/resume/assets/59009409/1256f0a1-9c9e-4ccc-9eaf-1176f0cc113a" alt="Logo" width="50" height="50">
   </a>
-  <h3><b>Investing plaform</b></h3>
+
+[kanzi.kr](https://kanzi.kr)
+
+**Investing Platform**
 
 </div>
 
@@ -59,7 +62,7 @@ API 형태로 가공/정제 처리된 정보를 이용가능합니다 [<a href="
         <li>per/eps : 주당가격(price) 을 eps(주당순이익) 으로 나눈 값. 또는 기업 시가총액/한해순이익</li>
         <li>pbr/bps: 주당가격(price)을 bps(주당순자산) 으로 나눈 값. 또는 기업 시가총액/순자산</li>
         <li>por/ops: 주당가격(price)을 ops(주당영업이익) 으로 나눈 값. 또는 기업 시가총액/영업이익</li>
-        <li>psr/sps: 주당가격(price)을 sps(주당매출액) 으로 나눈 값. 또는 기업 시가총액/매출액</li>
+        <li>psr/sps: 주당가격(price)을 sps(주당매출액) 으로 나눈 값. 또는 기업 시가총액/매출액</li>
     </ul>
 </details>
 <p>
