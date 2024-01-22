@@ -2,11 +2,11 @@
 <br />
 <div align="center">
 
-  <a href="https://kanzi.kr" target=_blank>
+  <a href="https://kanzi.kr" target="_blank">
     <img src="https://github.com/forthezorba/resume/assets/59009409/1256f0a1-9c9e-4ccc-9eaf-1176f0cc113a" alt="Logo" width="50" height="50">
   </a>
   <div>
-      <a href="https://kanzi.kr" target=_blank>
+      <a href="https://kanzi.kr" target="_blank">
         <b>kanzi.kr</b>
       </a>
   </div>
