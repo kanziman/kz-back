@@ -1,5 +1,6 @@
 package net.kanzi.kz.dto.stock;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import net.kanzi.kz.domain.stock.Market;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 public class TickerResponse {
 
     private Long id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime baseDate;
     private String stockCode;
     private String fsType;
@@ -19,13 +21,13 @@ public class TickerResponse {
     private Float psr;
     private Float por;
     private Float dy;
-    private Double value;
+    private Long value;
     private Long shares;
     private Long volume;
-    private Double close;
+    private Long close;
 
     @Builder
-    public TickerResponse(Long id, LocalDateTime baseDate, String stockCode, String fsType, Float per, Float pbr, Float por,Float psr, Float dy, Double value, Long shares, Long volume, Double close) {
+    public TickerResponse(Long id, LocalDateTime baseDate, String stockCode, String fsType, Float per, Float pbr, Float por,Float psr, Float dy, Long value, Long shares, Long volume, Long close) {
         this.id = id;
         this.baseDate = baseDate;
         this.stockCode = stockCode;

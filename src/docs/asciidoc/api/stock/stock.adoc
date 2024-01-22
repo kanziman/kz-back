@@ -1,0 +1,20 @@
+[[stock-market]]
+=== 시장 정보
+
+==== HTTP Request
+include::{snippets}/market-findList/http-request.adoc[]
+
+==== HTTP Response
+include::{snippets}/market-findList/http-response.adoc[]
+include::{snippets}/market-findList/response-fields.adoc[]
+
+
+=== 종목 정보
+
+==== HTTP Request
+include::{snippets}/ticker-findOne/http-request.adoc[]
+
+==== HTTP Response
+include::{snippets}/ticker-findOne/http-response.adoc[]
+include::{snippets}/ticker-findOne/response-fields.adoc[]
+

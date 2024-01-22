@@ -1,5 +1,6 @@
 package net.kanzi.kz.domain.stock;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

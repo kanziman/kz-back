@@ -1,5 +1,6 @@
 package net.kanzi.kz.dto.stock;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import net.kanzi.kz.domain.stock.Market;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 public class MarketResponse {
 
     private Long id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime baseDate;
     private String mktType;
     private Float open;

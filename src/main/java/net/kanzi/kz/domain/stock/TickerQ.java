@@ -20,8 +20,8 @@ public class TickerQ {
     private String stockCode;
     private LocalDateTime baseDate;
     private String indicator;
-    private Double value;
-    private Double close;
+    private Long value;
+    private Long close;
 
     //quarter
     private String fsType;

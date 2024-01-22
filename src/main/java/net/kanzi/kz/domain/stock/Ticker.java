@@ -26,9 +26,9 @@ public class Ticker {
     private float por;
     private float psr;
     private float dy;
-    private double value;
+    private long value;
     private long shares;
     private long volume;
-    private double close;
+    private long close;
 
 }
