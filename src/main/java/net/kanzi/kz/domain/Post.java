@@ -67,33 +67,24 @@ public class Post extends BaseEntity {
         this.user = user;
     }
 
-    public static Post create(Post post, User user) {
-        return Post.builder()
-                .title(post.getTitle())
-                .content(post.getContent())
-                .category(post.getCategory())
-                .tags(post.getTags())
-                .user(user)
-                .uid(user.getUid())
-                .build();
-    }
-
 
     public void upReadCount() {
         this.readCount = this.readCount+1;
     }
-    public void updateLikeCount(int upOrDown) {
-        if (Math.abs(upOrDown) != 1) {
-            throw new IllegalArgumentException("좋아요는 1씩 증가/감소만 가능합니다.");
-        }
-        this.likeCount = this.likeCount + upOrDown;
+
+    public void increaseLikeCount(){
+        this.likeCount = this.likeCount + 1;
     }
-    public void updateBookMarkCount(int upOrDown) {
-        if (Math.abs(upOrDown) != 1) {
-            throw new IllegalArgumentException("북마크는 1씩 증가/감소만 가능합니다.");
-        }
-        this.bookMarkCount = this.bookMarkCount + upOrDown;
+    public void decreaseLikeCount(){
+        this.likeCount = this.likeCount - 1;
     }
+    public void increaseBookmarkCount(){
+        this.bookMarkCount = this.bookMarkCount + 1;
+    }
+    public void decreaseBookmarkCount(){
+        this.bookMarkCount = this.bookMarkCount - 1;
+    }
+
 
     //==연간관계 매서드==//
     public void change(Post request) {
@@ -101,11 +92,14 @@ public class Post extends BaseEntity {
         this.content = request.getContent();
         this.category = request.getCategory();
 
-        if (request.getTags() != null ){
-            request.getTags().forEach(t -> this.addTag(t));
-        }
+        addTags(request);
     }
 
+    public void addTags(Post post) {
+        if (post.getTags() != null ){
+            post.getTags().forEach(t -> this.addTag(t));
+        }
+    }
     public void addTag(Tag tag) {
         tags.add(tag);
         tag.setPost(this);

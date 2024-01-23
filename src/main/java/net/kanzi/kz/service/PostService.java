@@ -70,9 +70,9 @@ public class PostService {
         // dto -> post
         Post post = request.toEntity();
         // post + user = create
-        Post postCreate = Post.create(post, user);
+        post.addUser(user);
         // save
-        Post save = postRepository.save(postCreate);
+        Post save = postRepository.save(post);
 
         return PostResponse.of(save);
     }
@@ -81,6 +81,7 @@ public class PostService {
      * GET POST ONE
      * @param id
      */
+    @Transactional(readOnly = false)
     public PostResponse findById(long id) {
         Post post = getPost(id);
         post.upReadCount();
@@ -138,10 +139,10 @@ public class PostService {
         if (hasLike == null) {
             Likes like = new Likes(post, user);
             likeRepository.save(like);
-            post.updateLikeCount(1);
+            post.increaseLikeCount();
         } else {
             likeRepository.delete(hasLike);
-            post.updateLikeCount(-1);
+            post.decreaseLikeCount();
         }
 
     }
@@ -167,10 +168,10 @@ public class PostService {
         if (hasBookMark == null) {
             BookMark bookMark = new BookMark(post, user);
             bookMarkRepository.save(bookMark);
-            post.updateBookMarkCount(1);
+            post.increaseBookmarkCount();
         } else {
             bookMarkRepository.delete(hasBookMark);
-            post.updateBookMarkCount(-1);
+            post.decreaseBookmarkCount();
         }
     }
 

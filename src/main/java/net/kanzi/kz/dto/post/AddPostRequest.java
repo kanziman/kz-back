@@ -39,12 +39,16 @@ public class AddPostRequest {
                 .ifPresent(tags -> Arrays.stream(tags)
                             .map(Tag::new)
                             .forEach(tagSet::add));
-        return Post.builder()
+
+        Post post = Post.builder()
                 .title(title)
                 .content(content)
                 .category(category)
                 .tags(tagSet)
                 .build();
+        post.getTags().forEach(t -> post.addTag(t));
+
+        return post;
     }
 
 

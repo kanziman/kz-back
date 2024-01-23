@@ -62,15 +62,7 @@ class PostTest {
                 .isEqualTo("user@gmail.com");
     }
 
-    @Test
-    @DisplayName("포스트의 좋아요는 1씩 만 증가/감소 할 수 있다.")
-    void postWithoutUserTest() {
-        Post post = createPost("t", "c", "cate",new String[]{});
 
-        assertThatThrownBy(()->post.updateLikeCount(2))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("좋아요는 1씩 증가/감소만 가능합니다.");;
-    }
 
     private Post createPost(String title, String content, String category, String[] strings){
         Set<Tag> tagSet = new HashSet<>();

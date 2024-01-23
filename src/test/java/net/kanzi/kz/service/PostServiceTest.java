@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import net.kanzi.kz.domain.Post;
 import net.kanzi.kz.domain.Role;
+import net.kanzi.kz.domain.Tag;
 import net.kanzi.kz.domain.User;
 import net.kanzi.kz.domain.exception.EntityNotFoundException;
 import net.kanzi.kz.domain.exception.NotAuthorizedUserException;
@@ -28,8 +29,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.tuple;
 
 @SpringBootTest
 class PostServiceTest {
@@ -93,6 +94,26 @@ class PostServiceTest {
         assertThat(postResponse)
                 .extracting("title", "content", "category")
                 .contains("t", "c", "cate");
+    }
+
+    @Test
+    @DisplayName("작성한 글의 태그를 확인할 수 있다.")
+    public void createPostTag() {
+
+        //given
+        AddPostRequest request = AddPostRequest.builder()
+                .title("t").content("c").category("cate")
+                .tags(new String[]{"tag1", "tag2"})
+                .build();
+        Post entity = request.toEntity();
+        Post save = postRepository.save(entity);
+
+        //when
+        List<Tag> tags = tagRepository.findByPostId(save);
+        //then
+        assertThat(tags)
+                .extracting("name")
+                .contains("tag1","tag2");
     }
 
     private User createUser(String uid, String email, Role role) {
@@ -163,10 +184,8 @@ class PostServiceTest {
                 .tags(tags)
                 .build();
         PostResponse postResponse = postService.addPost(request);
-
         // when
         PostResponse postOne = postService.findById(postResponse.getId());
-
         // then
         assertThat(postOne.getId()).isNotNull();
     }
