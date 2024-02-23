@@ -31,8 +31,10 @@
 
 -   국내시장의 ADR/CREDIT/VALUATION 정보를 제공합니다.(chart/api)
 -   국내기업의 per/pbr/psr/por 정보를 제공합니다.(chart/api)
--   간지봇 국내기업의 가장 최신 분기보고서(2023.3분기)를 바탕(RAG)으로 Chat GPT와 대화할 수 있습니다.
+-   ~~간지봇 국내기업의 가장 최신 분기보고서(2023.3분기)를 바탕(RAG)으로 Chat GPT와 대화할 수 있습니다.~~
 -   커뮤니티에 마크다운 형태로 글/댓글을 사용할 수 있습니다.
+-   KZ자산운용(가칭)에 관해 챗봇으로 안내 받을 수 있습니다.
+
 
 ## API docs <a name="docs"></a>
 
@@ -76,15 +78,16 @@ API 형태로 가공/정제 처리된 정보를 이용가능합니다 [<a href="
 
 > 챗봇
 
-질의시 벡터스토어(faiss)에서 가장 관련된 문서를 골라, AI모델에 원질문(stand alone)과 함께 컨텍스트를 질의해 답변을 구하는 방식의 챗봇입니다.
-현재 가장 최신 분기 보고서인 2023.3분기 보고서를 바탕으로 답변 가능합니다.
+~~질의시 벡터스토어(faiss)에서 가장 관련된 문서를 골라, AI모델에 원질문(stand alone)과 함께 컨텍스트를 질의해 답변을 구하는 방식의 챗봇입니다.
+현재 가장 최신 분기 보고서인 2023.3분기 보고서를 바탕으로 답변 가능합니다.~~
 
-| 카테고리     |              특징              |                                                                                                     GIF |
-| :----------- | :----------------------------: | ------------------------------------------------------------------------------------------------------: |
-| **시장**     |     adr,credit,kospi,kodaq     | <img src="https://github.com/forthezorba/resume/assets/59009409/2d40dd74-80d2-48d8-b8d8-f11d1a59b5d2" > |
-| **기업**     |        per,pbr,por,psr         | <img src="https://github.com/forthezorba/resume/assets/59009409/55ebed39-e324-4368-9b82-c43f58163539" > |
-| **커뮤니티** | 글/댓글/좋아요/북마크/필터검색 | <img src="https://github.com/forthezorba/resume/assets/59009409/088b6cca-c3bd-4baf-a4e1-1fbc689df95d" > |
-| **챗봇**     |           2023.3분기           | <img src="https://github.com/forthezorba/resume/assets/59009409/b57ae49f-1fb6-4b06-bac1-0cc6ba6f6183" > |
+| 카테고리       |                 특징                  |                                                                                                     GIF |
+|:-----------|:-----------------------------------:|--------------------------------------------------------------------------------------------------------:|
+| **시장**     |       adr,credit,kospi,kodaq        | <img src="https://github.com/forthezorba/resume/assets/59009409/2d40dd74-80d2-48d8-b8d8-f11d1a59b5d2" > |
+| **기업**     |           per,pbr,por,psr           | <img src="https://github.com/forthezorba/resume/assets/59009409/55ebed39-e324-4368-9b82-c43f58163539" > |
+| **커뮤니티**   |          글/댓글/좋아요/북마크/필터검색          | <img src="https://github.com/forthezorba/resume/assets/59009409/088b6cca-c3bd-4baf-a4e1-1fbc689df95d" > |
+| **~~챗봇~~** |                                     | <img src="https://github.com/forthezorba/resume/assets/59009409/b57ae49f-1fb6-4b06-bac1-0cc6ba6f6183" > |
+| **챗봇** |            |<img src="https://github.com/forthezorba/boiler_plate/assets/59009409/283d02cf-e034-466f-8942-361efa85e52b"> |
 
 ## Architecture <a name="architecture"></a>
 
@@ -93,6 +96,7 @@ API 형태로 가공/정제 처리된 정보를 이용가능합니다 [<a href="
 [배포 프로세스]
 
 ![img](https://github.com/forthezorba/resume/assets/59009409/5e6d9dad-ca49-4c3a-87e9-2665fcb6c130)
+
 
 ## 🛠 Built With <a name="built-with"></a>
 
