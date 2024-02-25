@@ -3,6 +3,7 @@ package net.kanzi.kz.dto.stock;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
+import net.kanzi.kz.domain.stock.KorMarket;
 import net.kanzi.kz.domain.stock.Market;
 
 import java.time.LocalDateTime;
@@ -18,19 +19,19 @@ public class MarketResponse {
     private Float high;
     private Float low;
     private Float close;
-    private Double volume;
-    private Double amount;
-    private Double value;
+    private Long volume;
+    private Long amount;
+    private Long value;
     private Float per;
     private Float pbr;
     private Float dy;
-    private Double credit;
-    private Double deposit;
+    private Long credit;
+    private Long deposit;
     private Float adr;
 
 
     @Builder
-    public MarketResponse(Long id, LocalDateTime baseDate, String mktType, Float open, Float high, Float low, Float close, Double volume, Double amount, Double value, Float per, Float pbr, Float dy, Double credit, Double deposit, Float adr) {
+    public MarketResponse(Long id, LocalDateTime baseDate, String mktType, Float open, Float high, Float low, Float close, Long volume, Long amount, Long value, Float per, Float pbr, Float dy, Long credit, Long deposit, Float adr) {
         this.id = id;
         this.baseDate = baseDate;
         this.mktType = mktType;
@@ -49,7 +50,7 @@ public class MarketResponse {
         this.adr = adr;
     }
 
-    public static MarketResponse of(Market market){
+    public static MarketResponse of(KorMarket market){
         return MarketResponse.builder()
                 .id(market.getId())
                 .baseDate(market.getBaseDate())
@@ -60,7 +61,7 @@ public class MarketResponse {
                 .close(market.getClose())
                 .volume(market.getVolume())
                 .amount(market.getAmount())
-                .value(market.getValue())
+                .value(market.getVal())
                 .per(market.getPer() )
                 .pbr(market.getPbr())
                 .dy(market.getDy())

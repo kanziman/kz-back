@@ -11,10 +11,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name = "market")
+@Table(name = "kor_market")
 @ToString
-
-public class Market {
+public class KorMarket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,8 +25,7 @@ public class Market {
     private Float close;
     private Long volume;
     private Long amount;
-    private Long value;
-    private Long fValue;
+    private Long val;
     private Float per;
     private Float pbr;
     private Float dy;

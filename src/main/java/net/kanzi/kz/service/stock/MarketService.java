@@ -1,6 +1,7 @@
 package net.kanzi.kz.service.stock;
 
 import lombok.RequiredArgsConstructor;
+import net.kanzi.kz.domain.stock.KorMarket;
 import net.kanzi.kz.domain.stock.Market;
 import net.kanzi.kz.dto.stock.MarketResponse;
 import net.kanzi.kz.repository.stock.MarketRepository;
@@ -15,7 +16,7 @@ public class MarketService {
     private final MarketRepository jpaRepository;
 
     public List<MarketResponse> findAll() {
-        List<Market> all = jpaRepository.findAll();
+        List<KorMarket> all = jpaRepository.findAll();
 
         return all.stream()
                 .map(m -> MarketResponse.of(m))
