@@ -1,9 +1,11 @@
 package net.kanzi.kz.repository.search;
 
 
-import net.kanzi.kz.domain.*;
+import net.kanzi.kz.domain.Post;
+import net.kanzi.kz.domain.User;
 import net.kanzi.kz.dto.post.PostRequestDto;
 import org.springframework.data.domain.PageImpl;
+
 import java.util.List;
 
 

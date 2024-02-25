@@ -2,10 +2,13 @@ package net.kanzi.kz.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import net.kanzi.kz.domain.*;
+import net.kanzi.kz.domain.BookMark;
+import net.kanzi.kz.domain.Likes;
+import net.kanzi.kz.domain.Post;
+import net.kanzi.kz.domain.User;
 import net.kanzi.kz.domain.exception.EntityNotFoundException;
 import net.kanzi.kz.domain.exception.NotAuthorizedUserException;
-import net.kanzi.kz.dto.*;
+import net.kanzi.kz.dto.TagResponse;
 import net.kanzi.kz.dto.post.*;
 import net.kanzi.kz.repository.*;
 import org.springframework.data.domain.PageImpl;
@@ -13,8 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
-import java.util.*;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 

@@ -3,7 +3,8 @@ name: CI/CD
 on:
   push:
     branches: [ main ]
-
+    paths-ignore:
+      - 'README.md'
 env: # 새로 추가한 부분
   S3_BUCKET_NAME: kz-build
   PROJECT_NAME: kz-app

@@ -5,13 +5,11 @@ import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import net.kanzi.kz.domain.stock.Ticker;
 import net.kanzi.kz.domain.stock.TickerQ;
-import net.kanzi.kz.dto.stock.TickerListResponse;
 import net.kanzi.kz.dto.stock.TickerQResponse;
 import net.kanzi.kz.dto.stock.TickerRequest;
 import net.kanzi.kz.dto.stock.TickerResponse;
 import org.hibernate.query.sql.internal.NativeQueryImpl;
 import org.hibernate.transform.AliasToEntityMapResultTransformer;
-import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -3,7 +3,6 @@ package net.kanzi.kz.repository;
 import net.kanzi.kz.domain.Post;
 import net.kanzi.kz.domain.Tag;
 import net.kanzi.kz.dto.TagResponse;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

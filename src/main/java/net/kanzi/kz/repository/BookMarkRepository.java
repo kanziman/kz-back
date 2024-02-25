@@ -1,16 +1,13 @@
 package net.kanzi.kz.repository;
 
 import net.kanzi.kz.domain.BookMark;
-import net.kanzi.kz.domain.Likes;
 import net.kanzi.kz.domain.Post;
 import net.kanzi.kz.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BookMarkRepository extends JpaRepository<BookMark, Long>  {
 
