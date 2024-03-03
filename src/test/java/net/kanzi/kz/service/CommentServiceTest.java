@@ -15,6 +15,7 @@ import net.kanzi.kz.repository.CommentRepository;
 import net.kanzi.kz.repository.PostRepository;
 import net.kanzi.kz.repository.TagRepository;
 import net.kanzi.kz.repository.UserRepository;
+import net.kanzi.kz.unit.PostRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -56,7 +57,7 @@ class CommentServiceTest {
 
     @BeforeEach
     void setSecurityContext() throws Exception {
-        User user1 = createUser("uid1", "email1@com", Role.USER);
+        User user1 = createUser("user-uuid", "email1@com", Role.USER);
         user = userRepository.save(user1);
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(new UsernamePasswordAuthenticationToken(user.getUid(), user.getEmail(), user.getAuthorities()));
@@ -73,16 +74,11 @@ class CommentServiceTest {
     public void createComment() {
 
         //given
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .build();
+        AddPostRequest request = PostRequest.creatAddPostRequest();
         PostResponse postResponse = postService.addPost(request);
         Post post = postRepository.findById(postResponse.getId()).get();
 
-        AddCommentRequest comment = AddCommentRequest.builder()
-                .message("message")
-                .commenter("uid")
-                .build();
+        AddCommentRequest comment = createCommentRequest();
 
         //when
         Long save = commentService.addComment(comment, post.getId());
@@ -91,21 +87,24 @@ class CommentServiceTest {
         assertThat(save).isNotNull();
     }
 
+    private static AddCommentRequest createCommentRequest() {
+        return AddCommentRequest.builder()
+                .message("message")
+                .commenter("user-uuid")
+                .build();
+    }
+
+
     @Test
     @DisplayName("포스트에 있는 댓글들을 조회할 수 있다.")
     public void findAllComments() {
 
         //given
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .build();
+        AddPostRequest request = PostRequest.creatAddPostRequest();
         PostResponse postResponse = postService.addPost(request);
         Post post = postRepository.findById(postResponse.getId()).get();
 
-        AddCommentRequest comment = AddCommentRequest.builder()
-                .message("message")
-                .commenter(user.getUid())
-                .build();
+        AddCommentRequest comment = createCommentRequest();
 
         //when
         commentService.addComment(comment, post.getId());
@@ -126,16 +125,11 @@ class CommentServiceTest {
     public void deleteComment() {
 
         //given
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .build();
+        AddPostRequest request = PostRequest.creatAddPostRequest();
         PostResponse postResponse = postService.addPost(request);
         Post post = postRepository.findById(postResponse.getId()).get();
 
-        AddCommentRequest comment = AddCommentRequest.builder()
-                .message("message")
-                .commenter(user.getUid())
-                .build();
+        AddCommentRequest comment = createCommentRequest();
 
         //when
         Long saved  = commentService.addComment(comment, post.getId());
@@ -150,16 +144,11 @@ class CommentServiceTest {
     public void changeComment() {
 
         //given
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .build();
+        AddPostRequest request = PostRequest.creatAddPostRequest();
         PostResponse postResponse = postService.addPost(request);
         Post post = postRepository.findById(postResponse.getId()).get();
 
-        AddCommentRequest comment = AddCommentRequest.builder()
-                .message("message")
-                .commenter(user.getUid())
-                .build();
+        AddCommentRequest comment = createCommentRequest();
 
         //when
         Long saved  = commentService.addComment(comment, post.getId());
@@ -181,5 +170,12 @@ class CommentServiceTest {
                 .build();
     }
 
+    private AddPostRequest creatAddPostRequest() {
+        AddPostRequest request = AddPostRequest.builder()
+                .uid("user-uuid")
+                .title("t").content("c").category("cate")
+                .build();
+        return request;
+    }
 
 }

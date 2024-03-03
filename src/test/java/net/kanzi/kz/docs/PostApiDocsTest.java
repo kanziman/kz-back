@@ -5,6 +5,7 @@ import net.kanzi.kz.dto.post.AddPostRequest;
 import net.kanzi.kz.dto.post.PageResultDTO;
 import net.kanzi.kz.dto.post.PostResponse;
 import net.kanzi.kz.service.PostService;
+import net.kanzi.kz.unit.PostRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -210,15 +211,12 @@ public class PostApiDocsTest extends RestDocsSupport{
     @Test
     public void create() throws Exception {
         //given
-        AddPostRequest request = AddPostRequest.builder()
-                .title("제목을 기재합니다.")
-                .content("내용을 기재합니다.")
-                .category("COMMUNITY")
-                .build();
+        AddPostRequest request = PostRequest.creatAddPostRequest();
 
         given(postService.addPost(any(AddPostRequest.class)))
                 .willReturn(PostResponse.builder()
                         .id(1L)
+                        .uid("user-uuid")
                         .title("제목을 기재합니다.")
                         .uid("3a727380-bca1-4aa1-b65d-8f887f7202ee")
                         .content("내용을 기재합니다.")
@@ -245,6 +243,8 @@ public class PostApiDocsTest extends RestDocsSupport{
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
+                                fieldWithPath("uid").type(JsonFieldType.STRING)
+                                        .description("USER-ID"),
                                 fieldWithPath("title").type(JsonFieldType.STRING)
                                         .description("제목"),
                                 fieldWithPath("content").type(JsonFieldType.STRING)

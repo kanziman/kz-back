@@ -32,7 +32,8 @@ public class AddPostRequest {
 
 
     @Builder
-    private AddPostRequest(String title, String content, String category, String[] tags) {
+    private AddPostRequest(String title, String uid, String content, String category, String[] tags) {
+        this.uid = uid;
         this.title = title;
         this.content = content;
         this.category = category;

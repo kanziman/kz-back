@@ -13,6 +13,7 @@ import net.kanzi.kz.dto.post.*;
 import net.kanzi.kz.repository.PostRepository;
 import net.kanzi.kz.repository.TagRepository;
 import net.kanzi.kz.repository.UserRepository;
+import net.kanzi.kz.unit.PostRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,7 +52,7 @@ class PostServiceTest {
 
     @BeforeEach
     void setSecurityContext() throws Exception {
-        User user1 = createUser("uid1", "email1@com", Role.USER);
+        User user1 = createUser("user-uuid", "email1@com", Role.USER);
         user = userRepository.save(user1);
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(new UsernamePasswordAuthenticationToken(user.getUid(), user.getEmail(), user.getAuthorities()));
@@ -78,11 +79,7 @@ class PostServiceTest {
     public void createPost() {
 
         //given
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .tags(new String[]{"tag1", "tag2"})
-                .build();
-
+        AddPostRequest request = PostRequest.creatAddPostRequest();
         //when
         PostResponse postResponse = postService.addPost(request);
 
@@ -132,6 +129,7 @@ class PostServiceTest {
         //given
         String[] tags = new String[]{"tag1", "tag2"};
         AddPostRequest request = AddPostRequest.builder()
+                .uid("user-uuid")
                 .title("t").content("c").category("cate")
                 .tags(tags)
                 .build();
@@ -158,9 +156,7 @@ class PostServiceTest {
     @Test
     public void getPostsPage() throws Exception {
         // given
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .build();
+        AddPostRequest request = PostRequest.creatAddPostRequest();
         for (int i = 0; i < 5; i++) {
             postService.addPost(request);
         }
@@ -179,10 +175,7 @@ class PostServiceTest {
     public void getPost() throws Exception {
         //given
         String[] tags = new String[]{"tag1", "tag2"};
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .tags(tags)
-                .build();
+        AddPostRequest request = PostRequest.creatAddPostRequest();
         PostResponse postResponse = postService.addPost(request);
         // when
         PostResponse postOne = postService.findById(postResponse.getId());
@@ -194,9 +187,7 @@ class PostServiceTest {
     @Test
     public void deletePost() throws Exception {
         // given
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .build();
+        AddPostRequest request = PostRequest.creatAddPostRequest();
         PostResponse postResponse = postService.addPost(request);
 
         User other = userRepository.save(createUser("uid2", "other@com", Role.USER));
@@ -212,10 +203,7 @@ class PostServiceTest {
     public void updatePost() throws Exception {
         // given
         String[] tags = new String[]{"tag1", "tag2"};
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .tags(tags)
-                .build();
+        AddPostRequest request = PostRequest.creatAddPostRequest();
         PostResponse postResponse = postService.addPost(request);
 
         String[] newTags = new String[]{"tag3"};
@@ -247,6 +235,7 @@ class PostServiceTest {
         for (int i = 0; i < 10; i++) {
             String[] tags = new String[]{String.format("tag%d", i)};
             AddPostRequest request = AddPostRequest.builder()
+                    .uid("user-uuid")
                     .title("t").content("c").category("cate")
                     .tags(tags)
                     .build();

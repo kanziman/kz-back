@@ -9,11 +9,11 @@ import org.springframework.http.MediaType;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,6 +41,7 @@ class PostApiControllerTest  extends ControllerTestSupport {
                 );
         Principal principal = () -> "user@gmail.com";
         AddPostRequest request = AddPostRequest.builder()
+                .uid("user-uuid")
                 .title("t").content("c").category("cate")
                 .build();
 
@@ -59,10 +60,10 @@ class PostApiControllerTest  extends ControllerTestSupport {
     void createPostWithoutTitle() throws Exception {
         //given
         AddPostRequest request = AddPostRequest.builder()
-                .content("c")
+                .uid("user-uuid")
+                .content("any-content")
                 .category("cate")
                 .build();
-
         // when // then
         mockMvc.perform(
                         post("/api/posts")
@@ -81,7 +82,8 @@ class PostApiControllerTest  extends ControllerTestSupport {
     void createPostWithoutContent() throws Exception {
         //given
         AddPostRequest request = AddPostRequest.builder()
-                .title("t")
+                .uid("user-uuid")
+                .title("any-title")
                 .category("cate")
                 .build();
 
@@ -103,8 +105,9 @@ class PostApiControllerTest  extends ControllerTestSupport {
     void createPostWithoutType() throws Exception {
         //given
         AddPostRequest request = AddPostRequest.builder()
-                .title("t")
-                .content("c")
+                .uid("user-uuid")
+                .title("any-title")
+                .content("any-content")
                 .build();
 
         // when // then

@@ -22,7 +22,6 @@ import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -130,7 +129,10 @@ public class StockApiDocsTest extends RestDocsSupport{
     @DisplayName("특정 종목 정보 조회가 가능하다.")
     @Test
     public void findCorp() throws Exception {
-        TickerRequest request = new TickerRequest("005930", "연결재무제표");
+        TickerRequest request = TickerRequest.builder()
+                                            .code("005930")
+                                            .option("연결재무제표")
+                                            .build();
 
         TickerResponse tickerResponse = TickerResponse.builder()
                 .id(1L)

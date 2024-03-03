@@ -1,19 +1,20 @@
 package net.kanzi.kz.service;
 
-import jakarta.persistence.EntityManager;
 import net.kanzi.kz.domain.Post;
 import net.kanzi.kz.domain.Role;
 import net.kanzi.kz.domain.User;
 import net.kanzi.kz.dto.post.AddPostRequest;
 import net.kanzi.kz.dto.post.PostResponse;
-import net.kanzi.kz.repository.*;
+import net.kanzi.kz.repository.BookMarkRepository;
+import net.kanzi.kz.repository.PostRepository;
+import net.kanzi.kz.repository.UserRepository;
+import net.kanzi.kz.unit.PostRequest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,7 +36,7 @@ class PostBookmarkServiceTest {
 
     @BeforeEach
     void setSecurityContext() throws Exception {
-        User user1 = createUser("uid1", "email1@com", Role.USER);
+        User user1 = createUser("user-uuid", "email1@com", Role.USER);
         user = userRepository.save(user1);
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(new UsernamePasswordAuthenticationToken(user.getUid(), user.getEmail(), user.getAuthorities()));
@@ -53,9 +54,7 @@ class PostBookmarkServiceTest {
     public void hasBookmark() {
 
         //given
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .build();
+        AddPostRequest request = PostRequest.creatAddPostRequest();
 
         PostResponse postResponse = postService.addPost(request);
 
@@ -72,10 +71,7 @@ class PostBookmarkServiceTest {
     @TestFactory
     Collection<DynamicTest> bookmarkAndCancel() throws Exception {
         //given
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .build();
-
+        AddPostRequest request = PostRequest.creatAddPostRequest();
         PostResponse postResponse = postService.addPost(request);
 
         //when
@@ -106,6 +102,13 @@ class PostBookmarkServiceTest {
                 .email(email)
                 .roleType(role)
                 .build();
+    }
+    private static AddPostRequest creatAddPostRequest() {
+        AddPostRequest request = AddPostRequest.builder()
+                .uid("user-uuid")
+                .title("t").content("c").category("cate")
+                .build();
+        return request;
     }
 
 

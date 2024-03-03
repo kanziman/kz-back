@@ -1,6 +1,5 @@
 package net.kanzi.kz.service;
 
-import jakarta.persistence.EntityManager;
 import net.kanzi.kz.domain.Post;
 import net.kanzi.kz.domain.Role;
 import net.kanzi.kz.domain.User;
@@ -8,8 +7,8 @@ import net.kanzi.kz.dto.post.AddPostRequest;
 import net.kanzi.kz.dto.post.PostResponse;
 import net.kanzi.kz.repository.LikeRepository;
 import net.kanzi.kz.repository.PostRepository;
-import net.kanzi.kz.repository.TagRepository;
 import net.kanzi.kz.repository.UserRepository;
+import net.kanzi.kz.unit.PostRequest;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +20,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class PostLikeServiceTest {
@@ -38,7 +36,7 @@ class PostLikeServiceTest {
 
     @BeforeEach
     void setSecurityContext() throws Exception {
-        User user1 = createUser("uid1", "email1@com", Role.USER);
+        User user1 = createUser("user-uuid", "email1@com", Role.USER);
         user = userRepository.save(user1);
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(new UsernamePasswordAuthenticationToken(user.getUid(), user.getEmail(), user.getAuthorities()));
@@ -56,9 +54,7 @@ class PostLikeServiceTest {
     public void hasLike() {
 
         //given
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .build();
+        AddPostRequest request = PostRequest.creatAddPostRequest();
 
         PostResponse postResponse = postService.addPost(request);
 
@@ -76,9 +72,7 @@ class PostLikeServiceTest {
     @TestFactory
     Collection<DynamicTest> likeAndCancel() throws Exception {
         //given
-        AddPostRequest request = AddPostRequest.builder()
-                .title("t").content("c").category("cate")
-                .build();
+        AddPostRequest request = PostRequest.creatAddPostRequest();
 
         PostResponse postResponse = postService.addPost(request);
 
@@ -111,6 +105,7 @@ class PostLikeServiceTest {
                 .roleType(role)
                 .build();
     }
+
 
 
 }

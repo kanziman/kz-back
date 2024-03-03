@@ -68,7 +68,7 @@ public class PostService {
     public PostResponse addPost(AddPostRequest request) {
         //        String uid = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUid(request.getUid())
-                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("not found user : " + request.getUid()));
+                .orElseThrow(() -> new EntityNotFoundException("not found user : " + request.getUid()));
 
         // dto -> post
         Post post = request.toEntity();
