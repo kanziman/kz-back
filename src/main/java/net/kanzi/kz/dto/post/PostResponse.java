@@ -37,7 +37,7 @@ public class PostResponse {
     private long commentCount;
 
     @Builder
-    public PostResponse(Long id, String title, String content, String category, String uid, List<String> tags, LocalDateTime createdAt, int readCount, int likeCount, int bookmarkCount, String photoURL, String nickName, long commentCount) {
+    private PostResponse(Long id, String title, String content, String category, String uid, List<String> tags, LocalDateTime createdAt, int readCount, int likeCount, int bookmarkCount, String photoURL, String nickName, long commentCount) {
         this.id = id;
         this.title = title;
         this.content = content;

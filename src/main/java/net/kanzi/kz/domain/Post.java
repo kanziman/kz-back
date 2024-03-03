@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import net.kanzi.kz.dto.post.AddPostRequest;
+import net.kanzi.kz.domain.exception.NotAuthorizedUserException;
 import org.hibernate.annotations.DynamicInsert;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -110,5 +113,9 @@ public class Post extends BaseEntity {
         this.uid = user.getUid();
     }
 
-
+    public void checkWriter(String writer) {
+        if (!uid.equals(writer)) {
+            throw new NotAuthorizedUserException("not authorized");
+        }
+    }
 }

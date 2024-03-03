@@ -28,7 +28,7 @@ public class TickerQResponse {
     private Long perShare;
 
     @Builder
-    public TickerQResponse(Long id, String stockCode,String indicator, LocalDateTime baseDate, Long value, Long close, String fsType, String stockName, String account, String gongsi, String fsName, Long ttm, Long shares, Long perShare) {
+    private TickerQResponse(Long id, String stockCode,String indicator, LocalDateTime baseDate, Long value, Long close, String fsType, String stockName, String account, String gongsi, String fsName, Long ttm, Long shares, Long perShare) {
         this.id = id;
         this.stockCode = stockCode;
         this.baseDate = baseDate;

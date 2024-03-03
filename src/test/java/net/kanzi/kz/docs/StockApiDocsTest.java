@@ -1,26 +1,17 @@
 package net.kanzi.kz.docs;
 
-import net.kanzi.kz.apiController.PostApiController;
-import net.kanzi.kz.apiController.StockController;
-import net.kanzi.kz.dto.post.AddPostRequest;
-import net.kanzi.kz.dto.post.PageResultDTO;
-import net.kanzi.kz.dto.post.PostResponse;
+import net.kanzi.kz.apicontroller.StockController;
 import net.kanzi.kz.dto.stock.MarketResponse;
 import net.kanzi.kz.dto.stock.TickerQResponse;
 import net.kanzi.kz.dto.stock.TickerRequest;
 import net.kanzi.kz.dto.stock.TickerResponse;
-import net.kanzi.kz.service.PostService;
 import net.kanzi.kz.service.stock.CorpService;
 import net.kanzi.kz.service.stock.MarketService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +22,6 @@ import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

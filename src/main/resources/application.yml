@@ -2,17 +2,6 @@
 spring:
   profiles:
     active: local
-  jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        default_batch_fetch_size: 100 #최적화 옵션
-    hibernate:
-      naming:
-        physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    #      ddl-auto: update
-    defer-datasource-initialization: true
   datasource:
     url: jdbc:h2:mem:~/kz
     driver-class-name: org.h2.Driver
@@ -66,6 +55,4 @@ spring:
 jwt:
   issuer: kanzirunner@gmail.com
   secret_key: kz-test
-server:
-  port: 8080
 callBackUrl: http://localhost:9000

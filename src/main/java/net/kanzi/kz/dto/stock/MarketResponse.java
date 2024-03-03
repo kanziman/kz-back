@@ -31,7 +31,7 @@ public class MarketResponse {
 
 
     @Builder
-    public MarketResponse(Long id, LocalDateTime baseDate, String mktType, Float open, Float high, Float low, Float close, Long volume, Long amount, Long value, Float per, Float pbr, Float dy, Long credit, Long deposit, Float adr) {
+    private MarketResponse(Long id, LocalDateTime baseDate, String mktType, Float open, Float high, Float low, Float close, Long volume, Long amount, Long value, Float per, Float pbr, Float dy, Long credit, Long deposit, Float adr) {
         this.id = id;
         this.baseDate = baseDate;
         this.mktType = mktType;

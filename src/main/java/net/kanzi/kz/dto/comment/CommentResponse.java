@@ -21,7 +21,7 @@ public class CommentResponse {
     private LocalDateTime createdAt;
 
     @Builder
-    public CommentResponse(Long id, String message, String commenter, String photoURL, String nickName, LocalDateTime createdAt) {
+    private CommentResponse(Long id, String message, String commenter, String photoURL, String nickName, LocalDateTime createdAt) {
         this.id = id;
         this.message = message;
         this.commenter = commenter;
@@ -31,7 +31,7 @@ public class CommentResponse {
     }
 
     @Builder
-    public CommentResponse(Comment comment, User user) {
+    private CommentResponse(Comment comment, User user) {
         this.id = comment.getId();
 
         this.commenter = comment.getCommenter();

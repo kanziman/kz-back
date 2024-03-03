@@ -1,6 +1,6 @@
 package net.kanzi.kz.docs;
 
-import net.kanzi.kz.apiController.CommentApiController;
+import net.kanzi.kz.apicontroller.CommentApiController;
 import net.kanzi.kz.dto.comment.AddCommentRequest;
 import net.kanzi.kz.dto.comment.CommentResponse;
 import net.kanzi.kz.service.CommentService;

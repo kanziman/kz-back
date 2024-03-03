@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.assertj.core.api.Assertions.tuple;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class PostServiceTest {
@@ -221,12 +221,13 @@ class PostServiceTest {
         String[] newTags = new String[]{"tag3"};
         UpdatePostRequest updatePostRequest = UpdatePostRequest.builder()
                 .id(postResponse.getId())
+                .writer(user.getUid())
                 .title("tt").content("cc").category("cate")
                 .tags(newTags)
                 .build();
 
         // when
-        postService.update(postResponse.getId(), updatePostRequest, user.getUid());
+        postService.update(postResponse.getId(), updatePostRequest);
 
         // then
         PostResponse response = postService.findById(postResponse.getId());

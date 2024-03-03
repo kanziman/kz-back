@@ -7,8 +7,9 @@ import net.kanzi.kz.domain.Post;
 import net.kanzi.kz.domain.Role;
 import net.kanzi.kz.domain.User;
 import net.kanzi.kz.dto.comment.AddCommentRequest;
-import net.kanzi.kz.dto.post.AddPostRequest;
 import net.kanzi.kz.dto.comment.CommentResponse;
+import net.kanzi.kz.dto.comment.UpdateCommentRequest;
+import net.kanzi.kz.dto.post.AddPostRequest;
 import net.kanzi.kz.dto.post.PostResponse;
 import net.kanzi.kz.repository.CommentRepository;
 import net.kanzi.kz.repository.PostRepository;
@@ -27,7 +28,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
 @SpringBootTest
@@ -138,7 +139,7 @@ class CommentServiceTest {
 
         //when
         Long saved  = commentService.addComment(comment, post.getId());
-        commentService.deleteComment(saved);
+        commentService.deleteComment(saved, comment.getCommenter());
 
         //then
         assertThat(commentRepository.findById(saved)).isEmpty();
@@ -163,11 +164,8 @@ class CommentServiceTest {
         //when
         Long saved  = commentService.addComment(comment, post.getId());
 
-        AddCommentRequest newComment = AddCommentRequest.builder()
-                .message("new message")
-                .commenter(user.getUid())
-                .build();
-        commentService.updateComment(newComment, saved);
+        UpdateCommentRequest newMessage = new UpdateCommentRequest(saved, "new message", user.getUid());
+        commentService.updateComment(newMessage);
 
         //then
         Comment updated = commentRepository.findById(saved).get();

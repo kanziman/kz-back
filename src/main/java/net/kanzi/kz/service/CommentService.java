@@ -9,6 +9,7 @@ import net.kanzi.kz.domain.exception.EntityNotFoundException;
 import net.kanzi.kz.domain.exception.NotAuthorizedUserException;
 import net.kanzi.kz.dto.comment.AddCommentRequest;
 import net.kanzi.kz.dto.comment.CommentResponse;
+import net.kanzi.kz.dto.comment.UpdateCommentRequest;
 import net.kanzi.kz.repository.CommentRepository;
 import net.kanzi.kz.repository.PostRepository;
 import net.kanzi.kz.repository.UserRepository;
@@ -62,14 +63,14 @@ public class CommentService {
      * UPDATE COMMENTS
      */
     @Transactional(readOnly = false)
-    public Long updateComment(AddCommentRequest request, Long commentId) {
+    public Long updateComment(UpdateCommentRequest updateCommentRequest) {
 
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException("not found : " + commentId));
+        Comment comment = commentRepository.findById(updateCommentRequest.getCommentId())
+                .orElseThrow(() -> new EntityNotFoundException("not found : " + updateCommentRequest.getCommentId()));
 
-        authorizeCommentAuthor(comment);
+        comment.checkWriter(updateCommentRequest.getCommenter());
 
-        comment.change(request.getMessage());
+        comment.change(updateCommentRequest.getMessage());
 
         return comment.getId();
     }
@@ -78,11 +79,10 @@ public class CommentService {
      * DELETE COMMENT
      */
     @Transactional(readOnly = false)
-    public void deleteComment(long commentId) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException("not found : " + commentId));
-
-        authorizeCommentAuthor(comment);
+    public void deleteComment(Long commnetId, String commenter) {
+        Comment comment = commentRepository.findById(commnetId)
+                .orElseThrow(() -> new EntityNotFoundException("not found : " + commnetId));
+        comment.checkWriter(commenter);
         commentRepository.delete(comment);
     }
 

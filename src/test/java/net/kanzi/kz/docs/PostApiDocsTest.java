@@ -1,6 +1,6 @@
 package net.kanzi.kz.docs;
 
-import net.kanzi.kz.apiController.PostApiController;
+import net.kanzi.kz.apicontroller.PostApiController;
 import net.kanzi.kz.dto.post.AddPostRequest;
 import net.kanzi.kz.dto.post.PageResultDTO;
 import net.kanzi.kz.dto.post.PostResponse;

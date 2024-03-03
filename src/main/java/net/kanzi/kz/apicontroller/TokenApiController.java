@@ -1,4 +1,4 @@
-package net.kanzi.kz.apiController;
+package net.kanzi.kz.apicontroller;
 
 import lombok.RequiredArgsConstructor;
 import net.kanzi.kz.dto.user.CreateAccessTokenRequest;

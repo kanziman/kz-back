@@ -12,7 +12,7 @@ public class TickerListResponse {
     private String mktType;
     private String stockCode;
     @Builder
-    public TickerListResponse(String stockName, String mktType, String stockCode) {
+    private TickerListResponse(String stockName, String mktType, String stockCode) {
         this.stockName = stockName;
         this.mktType = mktType;
         this.stockCode = stockCode;

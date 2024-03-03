@@ -1,18 +1,24 @@
 package net.kanzi.kz.dto.post;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import net.kanzi.kz.domain.Post;
 import net.kanzi.kz.domain.Tag;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
 @ToString
 public class AddPostRequest {
-//    private String uid;
+    @NotBlank(message = "ID는 필수입니다.")
+    private String uid;
     @NotBlank(message = "제목은 필수입니다.")
     private String title;
 

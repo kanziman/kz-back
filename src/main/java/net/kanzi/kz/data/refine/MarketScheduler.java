@@ -1,4 +1,4 @@
-package net.kanzi.kz.data.queryDto;
+package net.kanzi.kz.data.refine;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;

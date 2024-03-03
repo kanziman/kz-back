@@ -1,4 +1,4 @@
-package net.kanzi.kz.apiController;
+package net.kanzi.kz.apicontroller;
 
 import net.kanzi.kz.domain.exception.EntityNotFoundException;
 import net.kanzi.kz.domain.exception.NotAuthorizedUserException;

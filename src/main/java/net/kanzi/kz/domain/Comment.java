@@ -2,17 +2,12 @@ package net.kanzi.kz.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
+import net.kanzi.kz.domain.exception.NotAuthorizedUserException;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,7 +32,7 @@ public class Comment extends BaseEntity{
 
 
     @Builder
-    public Comment(String commenter, String message, Long userId, Post post) {
+    private Comment(String commenter, String message, Long userId, Post post) {
         this.commenter = commenter;
         this.message = message;
         this.userId = userId;
@@ -54,5 +49,11 @@ public class Comment extends BaseEntity{
     }
     public void setUserId(Long id) {
         this.userId = id;
+    }
+
+    public void checkWriter(String writer) {
+        if (!commenter.equals(writer)) {
+            throw new NotAuthorizedUserException("not authorized");
+        }
     }
 }

@@ -1,4 +1,4 @@
-package net.kanzi.kz.apiController;
+package net.kanzi.kz.apicontroller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -39,18 +38,18 @@ public class PostApiController {
         return ApiResponse.of(HttpStatus.OK, postResponse) ;
     }
 
-    @DeleteMapping("/api/posts/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable long id, Principal principal) {
-        postService.delete(id, principal.getName());
+    @DeleteMapping("/api/posts/{id}/{writer}")
+    public ResponseEntity<Void> deletePost(@PathVariable long id, @PathVariable String writer) {
+        postService.delete(id, writer);
         return ResponseEntity.ok()
                 .build();
     }
 
-    @PatchMapping("/api/posts/{id}")
+    @PutMapping("/api/posts/{id}")
     public ResponseEntity<PostResponse> putPost(@PathVariable long id, @RequestBody UpdatePostRequest request
-    ,Principal principal
+
     ) {
-        PostResponse response = postService.update(id, request, principal.getName());
+        PostResponse response = postService.update(id, request);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
@@ -83,6 +82,18 @@ public class PostApiController {
         boolean hasBookMark = postService.hasBookMark(postId, uid);
         return ResponseEntity.ok()
                 .body(hasBookMark);
+    }
+
+    @GetMapping("/api/posts/users/{uid}/bookMarks")
+    public ApiResponse<List<PostResponse>> getUserBookMark(@PathVariable String uid) {
+        List<PostResponse> userBookMarksPosts = postService.getUserBookMarks(uid);
+
+        return ApiResponse.of(HttpStatus.OK, userBookMarksPosts);
+    }
+    @GetMapping("/api/posts/users/{uid}/likes")
+    public ApiResponse<List<PostResponse>> getUserLikes(@PathVariable String uid) {
+        List<PostResponse> userLikes = postService.getUserLikes(uid);
+        return ApiResponse.of(HttpStatus.OK, userLikes);
     }
 
     // == TAG

@@ -1,4 +1,4 @@
-package net.kanzi.kz.apiController;
+package net.kanzi.kz.apicontroller;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

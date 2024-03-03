@@ -12,10 +12,10 @@ import net.kanzi.kz.dto.TagResponse;
 import net.kanzi.kz.dto.post.*;
 import net.kanzi.kz.repository.*;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -66,8 +66,9 @@ public class PostService {
      */
 
     public PostResponse addPost(AddPostRequest request) {
-        String uid = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = getUser(uid);
+        //        String uid = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUid(request.getUid())
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("not found user : " + request.getUid()));
 
         // dto -> post
         Post post = request.toEntity();
@@ -97,13 +98,12 @@ public class PostService {
      */
 
     @Transactional(readOnly = false)
-    public void delete(long id, String uid) {
+    public void delete(long id, String writer) {
 
         Post post = getPost(id);
-        authorizeArticleAuthor(post, uid);
+        post.checkWriter(writer);
         postRepository.deleteById(id);
     }
-
     /**
      * UPDATE POST
      *
@@ -112,10 +112,10 @@ public class PostService {
      * @return
      */
     @Transactional(readOnly = false)
-    public PostResponse update(long id, UpdatePostRequest request, String uid) {
+    public PostResponse update(long id, UpdatePostRequest request) {
 
         Post post = getPost(id);
-        authorizeArticleAuthor(post, uid);
+        post.checkWriter(request.getWriter());
 
         // 기존 태그 삭제
         tagRepository.deleteAllInBatch(post.getTags());
@@ -213,5 +213,37 @@ public class PostService {
         }
     }
 
+    public List<PostResponse> getUserBookMarks(String uid) {
+        List<PostResponse> responses = new ArrayList<>();
+        try {
+            User user = userRepository.findByUid(uid)
+                    .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("not found user : " + uid));
+            //user bookmark (북마크 조회기 떄문에 북마크는 전부 true )
+            List<Post> bookMarksPosts = bookMarkRepository.getUserBookMarksPosts(user);
+            responses = bookMarksPosts.stream()
+                    .map(b -> PostResponse.of(b))
+                    .collect(Collectors.toList());
+        } catch (jakarta.persistence.EntityNotFoundException e){
+            log.info(e.getMessage());
+        }
+
+        return responses;
+    }
+    public List<PostResponse> getUserLikes(String uid) {
+        List<PostResponse> responses = new ArrayList<>();
+        try {
+            User user = userRepository.findByUid(uid)
+                    .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("not found user : " + uid));
+
+            //user like check
+            List<Post> userLikesPosts = likeRepository.getUserLikesPosts(user);
+            responses = userLikesPosts.stream()
+                    .map(p -> PostResponse.of(p))
+                    .collect(Collectors.toList());
+        } catch (jakarta.persistence.EntityNotFoundException e){
+            log.info(e.getMessage());
+        }
+        return responses;
+    }
 
 }

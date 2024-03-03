@@ -2,21 +2,15 @@ package net.kanzi.kz.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.kanzi.kz.domain.Post;
 import net.kanzi.kz.domain.User;
-import net.kanzi.kz.dto.post.PostResponse;
-import net.kanzi.kz.repository.BookMarkRepository;
-import net.kanzi.kz.repository.LikeRepository;
 import net.kanzi.kz.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -24,9 +18,8 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final LikeRepository likeRepository;
-    private final BookMarkRepository bookMarkRepository;
 
+    @Transactional(readOnly = false)
     public void update(String uid, String nickName) {
         User user = userRepository.findByUid(uid)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
@@ -49,38 +42,6 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
     }
 
-    public List<PostResponse> getUserBookMarks(String uid) {
-        List<PostResponse> responses = new ArrayList<>();
-        try {
-            User user = userRepository.findByUid(uid)
-                    .orElseThrow(() -> new UsernameNotFoundException("not found user : " + uid));
-            //user bookmark (북마크 조회기 떄문에 북마크는 전부 true )
-            List<Post> bookMarksPosts = bookMarkRepository.getUserBookMarksPosts(user);
-            responses = bookMarksPosts.stream()
-                    .map(b -> PostResponse.of(b))
-                    .collect(Collectors.toList());
-        } catch (UsernameNotFoundException e){
-            log.info(e.getMessage());
-        }
-
-        return responses;
-    }
-    public List<PostResponse> getUserLikes(String uid) {
-        List<PostResponse> responses = new ArrayList<>();
-        try {
-            User user = userRepository.findByUid(uid)
-                    .orElseThrow(() -> new UsernameNotFoundException("not found user : " + uid));
-
-            //user like check
-            List<Post> userLikesPosts = likeRepository.getUserLikesPosts(user);
-            responses = userLikesPosts.stream()
-                    .map(p -> PostResponse.of(p))
-                    .collect(Collectors.toList());
-        } catch (UsernameNotFoundException e){
-            log.info(e.getMessage());
-        }
-        return responses;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
