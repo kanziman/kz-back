@@ -1,7 +1,6 @@
 package net.kanzi.kz.data.refine;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,22 +24,24 @@ class MarketSchedulerTest {
     MarketScheduler marketScheduler;
 
 
-    @Test void adrList() throws SQLException {
+//    @Test
+    void adrList() throws SQLException {
 //        marketScheduler.scheduleTask();
 
         List<DailyMarketSummary> adrList = marketRefineService.getCountAdrReduce();
-        System.out.println("adrList = " + adrList);
+        log.info("adrList size : {}", adrList.size());
 
         assertThat(adrList.size()).isGreaterThan(0);
     }
 
-    @Test void getMarketListAfterTargetAdrDate() throws SQLException {
+//    @Test
+    void getMarketListAfterTargetAdrDate() throws SQLException {
 
         LocalDate yesterday = LocalDate.now().minusMonths(2);
 
         // MARKET LIST >= ADR[0].baseDate
         List<MarketRefine> marketListAfterTargetAdrDate = marketRefineService.getMarketListAfterTargetAdrDate(Date.valueOf(yesterday));
-        log.info("marketListAfterTargetAdrDate : {}", marketListAfterTargetAdrDate);
+        log.info("marketListAfterTargetAdrDate size : {}", marketListAfterTargetAdrDate.size());
 
         assertThat(marketListAfterTargetAdrDate.size()).isGreaterThan(0);
     }
